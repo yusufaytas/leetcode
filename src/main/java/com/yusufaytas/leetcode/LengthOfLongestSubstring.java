@@ -40,10 +40,5 @@ public class LengthOfLongestSubstring
         return maxLengthSoFar;
     }
 
-    public static void main(String[] args)
-    {
-        LengthOfLongestSubstring l = new LengthOfLongestSubstring();
-        System.out.println(l.lengthOfLongestSubstring("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"));
-    }
 }
 
