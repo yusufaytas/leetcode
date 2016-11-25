@@ -26,11 +26,11 @@ public class RemoveNthNode
             temp = temp.next;
             nth = nth.next;
         }
-        if(temp.next == null)
+        if (temp.next == null)
         {
             return null;
         }
-        if(nth == null)
+        if (nth == null)
         {
             head = temp.next;
         }
@@ -39,17 +39,6 @@ public class RemoveNthNode
             temp.next = temp.next.next;
         }
         return head;
-    }
-
-    public static class ListNode
-    {
-        int val;
-        ListNode next;
-
-        ListNode(int x)
-        {
-            val = x;
-        }
     }
 
 }

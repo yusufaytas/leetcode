@@ -44,14 +44,4 @@ public class AddTwoNumbers
         return sum;
     }
 
-    public static class ListNode
-    {
-        int val;
-        ListNode next;
-
-        ListNode(int x)
-        {
-            val = x;
-        }
-    }
 }
