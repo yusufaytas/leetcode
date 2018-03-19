@@ -1,8 +1,11 @@
 package com.yusufaytas.leetcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /*
 You have k lists of sorted integers in ascending order.
@@ -32,49 +35,41 @@ public class SmallestRange
         {
             return null;
         }
-        int currentMinRange = Integer.MAX_VALUE;
-        int min = 0, max = 0;
+        int[] indexes = new int[nums.size()];
+        int min = 0, max = Integer.MAX_VALUE - 1, currentMax = Integer.MIN_VALUE;
+        PriorityQueue<Integer> heap = new PriorityQueue<>(Comparator.comparingInt(o -> nums.get(o).get(indexes[o])));
         for (int i = 0; i < nums.size(); i++)
         {
-            for (int j = 0; j < nums.get(i).size(); j++)
+            heap.add(i);
+            if (nums.get(i).get(0) > currentMax)
             {
-                for (int k = i; k < nums.size(); k++)
-                {
-                    for (int l = 0; l < nums.get(k).size(); l++)
-                    {
-                        int m = nums.get(i).get(j) > nums.get(k).get(l) ? nums.get(i).get(j) : nums.get(k).get(l);
-                        int n = nums.get(i).get(j) < nums.get(k).get(l) ? nums.get(i).get(j) : nums.get(k).get(l);
-
-                        int range = m - n;
-                        if (range >= currentMinRange)
-                        {
-                            continue;
-                        }
-
-                        boolean found = true;
-                        for (int a = 0; a < nums.size(); a++)
-                        {
-                            boolean isFoundInList = false;
-                            for (int b = 0; b < nums.get(a).size(); b++)
-                            {
-                                int val = nums.get(a).get(b);
-                                if (val <= m && val >= n)
-                                {
-                                    isFoundInList = true;
-                                    break;
-                                }
-                            }
-                            found = found && isFoundInList;
-                        }
-                        if (found)
-                        {
-                            currentMinRange = range;
-                            min = m;
-                            max = n;
-                        }
-                    }
-                }
+                currentMax = nums.get(i).get(0);
             }
+        }
+
+        while (true)
+        {
+            int currentMinList = heap.poll();
+            int currentMin = nums.get(currentMinList).get(indexes[currentMinList]);
+
+            if (currentMax - currentMin < max - min)
+            {
+                max = currentMax;
+                min = currentMin;
+            }
+
+            indexes[currentMinList]++;
+
+            if (indexes[currentMinList] >= nums.get(currentMinList).size())
+            {
+                break;
+            }
+
+            if (nums.get(currentMinList).get(indexes[currentMinList]) > currentMax)
+            {
+                currentMax = nums.get(currentMinList).get(indexes[currentMinList]);
+            }
+            heap.add(currentMinList);
         }
         return new int[]{max, min};
     }
@@ -83,12 +78,12 @@ public class SmallestRange
     {
         List<List<Integer>> nums = new ArrayList<>();
         List<Integer> l1 = new ArrayList<>();
-        Collections.addAll(l1,1, 2, 3);
+        Collections.addAll(l1, -40, -20, 1, 9, 12, 12, 14);
         List<Integer> l2 = new ArrayList<>();
-        Collections.addAll(l2,1, 2, 3);
+        Collections.addAll(l2, -39, 42, 70, 70, 70, 71, 72, 72, 73);
         List<Integer> l3 = new ArrayList<>();
-        Collections.addAll(l3,1, 2, 3);
+        Collections.addAll(l3, -2, 6, 11, 12, 12, 13, 15);
         Collections.addAll(nums, l1, l2, l3);
-        System.out.println(new SmallestRange().smallestRange(nums));
+        System.out.println(Arrays.toString(new SmallestRange().smallestRange(nums)));
     }
 }
