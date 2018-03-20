@@ -1,9 +1,11 @@
 package com.yusufaytas.leetcode;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 /*
 Given a string S and a string T,
@@ -22,43 +24,92 @@ public class MinimumWindowSubstring
 {
     public String minWindow(String s, String t)
     {
-        Map<Character, List<Integer>> indexes = new HashMap<>();
+        if (t.length() > s.length())
+        {
+            return "";
+        }
+
+        Map<Character, List<Integer>> charMap = new HashMap<>();
+        Map<Character, Integer> countMap = new HashMap<>();
         for (int i = 0; i < t.length(); i++)
         {
-            indexes.put(t.charAt(i), new ArrayList<>());
+            charMap.put(t.charAt(i), new ArrayList<>());
+            countMap.put(t.charAt(i), countMap.getOrDefault(t.charAt(i), 0) + 1);
         }
         for (int i = 0; i < s.length(); i++)
         {
             char value = s.charAt(i);
-            if (indexes.containsKey(value))
+            if (charMap.containsKey(value))
             {
-                indexes.get(value).add(i);
+                charMap.get(value).add(i);
             }
         }
-        if (indexes.values().stream().filter(value -> value.size() > 0).count() != t.length())
+
+        if (charMap.values().stream().anyMatch(integers -> integers.isEmpty()))
         {
             return "";
         }
-        Map<Character, Integer> index = new HashMap<>();
-        int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
-        // A = 4, 5, 13,
-        // B = 2, 6, 9, 14
-        // C = 8, 10, 11, 12
 
-        // (A=0, B=0, C=0)=>6, (A=0, B=1, C=0)=>4, (A=1, B=1, C=0)=>4 |
-        // (A=2, B=2, C=1)=>4, A
-        for (int i : index.values())
+
+        int[] index = new int[t.length()];
+
+        List<List<Integer>> indexes = new ArrayList<>();
+        for (Map.Entry<Character, List<Integer>> entry : charMap.entrySet())
         {
-            if (i > max)
+            int count = countMap.get(entry.getKey());
+            List<Integer> listToDivide = entry.getValue();
+
+            if (listToDivide.size() < count)
             {
-                max = i;
+                return "";
             }
-            if (i < min)
+
+            List<List<Integer>> allLists = new ArrayList<>();
+            for (int i = 0; i < count; i++)
             {
-                min = i;
+                allLists.add(new ArrayList<>());
+            }
+            for (int i = 0; i < listToDivide.size(); i++)
+            {
+                allLists.get(i % count).add(listToDivide.get(i));
+            }
+            indexes.addAll(allLists);
+        }
+
+        int max = Integer.MAX_VALUE - 1, min = 0, currentMax = Integer.MIN_VALUE;
+        PriorityQueue<Integer> minQueue = new PriorityQueue<>(Comparator.comparingInt(o -> indexes.get(o).get(index[o])));
+
+        for (int i = 0; i < index.length; i++)
+        {
+            minQueue.add(i);
+            if (currentMax < indexes.get(i).get(0))
+            {
+                currentMax = indexes.get(i).get(0);
             }
         }
-        return s.substring(min, max);
+
+        while (true)
+        {
+            int currentMinList = minQueue.poll();
+            int currentMin = indexes.get(currentMinList).get(index[currentMinList]);
+            if (currentMax - currentMin < max - min)
+            {
+                max = currentMax;
+                min = currentMin;
+            }
+
+            index[currentMinList]++;
+            if (index[currentMinList] >= indexes.get(currentMinList).size())
+            {
+                break;
+            }
+            if (currentMax < indexes.get(currentMinList).get(index[currentMinList]))
+            {
+                currentMax = indexes.get(currentMinList).get(index[currentMinList]);
+            }
+            minQueue.add(currentMinList);
+        }
+        return s.substring(min, max + 1);
     }
 
     public static void main(String[] args)
