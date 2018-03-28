@@ -1,11 +1,18 @@
 package com.yusufaytas.leetcode;
 
+import java.util.Arrays;
+
 /*
 Given a string s, partition s such that every substring of the partition is a palindrome.
 
 Return the minimum cuts needed for a palindrome partitioning of s.
 
-For example, given s = "aab",
+For example, given s = "aabcbd" =>
+i=0: a      | [0, 4, 4, 4, 4]
+i=1: aa     | [0, 0, 4, 4, 4]
+i=2: aab    | [0, 0, 1, 4, 4]
+i=3: aabc   | [0, 0, 1, 2, 4]
+i=4: aabcb  | [0, 0, 1, 2, 1]
 Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
  */
 public class PalindromePartitioning2
@@ -16,47 +23,60 @@ public class PalindromePartitioning2
         {
             return 0;
         }
-        int[][] minPalindromes = new int[s.length()][s.length()];
-        return minCut(s, 0, s.length() - 1, minPalindromes);
+        boolean palindromes[][] = getPalindromes(s);
+        int[] minCuts = findMinCuts(s, palindromes);
+
+        return minCuts[s.length() - 1];
     }
 
-    protected int minCut(String s, int start, int end, int[][] minPalindromes)
+    private int[] findMinCuts(String s, boolean[][] palindromes)
     {
-        if (minPalindromes[start][end] != 0)
-        {
-            return minPalindromes[start][end];
-        }
-        if (isPalindrome(s, start, end))
-        {
-            return 0;
-        }
-        int min = Integer.MAX_VALUE;
-        for (int i = start; i < end; i++)
-        {
-            int rightMin = minCut(s, i + 1, end, minPalindromes);
-            int leftMin = minCut(s, start, i, minPalindromes);
-            min = Math.min(leftMin + rightMin + 1, min);
-        }
-        minPalindromes[start][end] = min;
-        return min;
-    }
+        int[] minCuts = new int[s.length()];
+        Arrays.fill(minCuts, s.length() - 1);
 
-    protected boolean isPalindrome(String s, int start, int end)
-    {
-        int mid = (start + end) / 2;
-        for (int i = 0; i + start <= mid; i++)
+        for (int i = 0; i < minCuts.length; i++)
         {
-            if (s.charAt(start + i) != s.charAt(end - i))
+            for (int j = 0; j <= i; j++)
             {
-                return false;
+                if (palindromes[j][i])
+                {
+                    minCuts[i] = j == 0 ? 0 : Math.min(minCuts[i], minCuts[j - 1] + 1);
+                }
             }
         }
-        return true;
+        return minCuts;
+    }
+
+    private boolean [][] getPalindromes(String s)
+    {
+        boolean palindromes[][] = new boolean[s.length()][s.length()];
+        for (int i = 0; i < s.length(); i++)
+        {
+            for (int j = 0; j <= i; j++)
+            {
+                if (i == j)
+                {
+                    palindromes[j][i] = true;
+                }
+                else if (s.charAt(i) == s.charAt(j))
+                {
+                    if (i - j == 1)
+                    {
+                        palindromes[j][i] = true;
+                    }
+                    else if (i - j > 1)
+                    {
+                        palindromes[j][i] = palindromes[j + 1][i - 1];
+                    }
+                }
+            }
+        }
+        return palindromes;
     }
 
     public static void main(String[] args)
     {
-        String s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        String s = "aabb";
         System.out.println(new PalindromePartitioning2().minCut(s));
     }
 }
