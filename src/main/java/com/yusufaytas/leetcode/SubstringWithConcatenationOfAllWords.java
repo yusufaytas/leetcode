@@ -30,46 +30,55 @@ public class SubstringWithConcatenationOfAllWords
         }
         int size = words[0].length();
         List<Integer> indexes = new ArrayList<>();
-        Map<Integer, Integer> indexesInString = new HashMap<>();
-        Map<String, Integer> wordIndexes = new HashMap<>();
-        Map<Integer, Integer> wordCount = new HashMap<>();
-        for (int i = 0; i < words.length; i++)
+        Map<String, Integer> wordCount = new HashMap<>();
+        for (String word : words)
         {
-            wordIndexes.putIfAbsent(words[i], i);
-            wordCount.put(wordIndexes.get(words[i]), wordCount.getOrDefault(wordIndexes.get(words[i]), 0) + 1);
+            int count = wordCount.getOrDefault(word, 0);
+            wordCount.put(word, count + 1);
         }
 
-        for (int i = 0; i < s.length() - size + 1; i++)
+        for (int i = 0; i < size; i++)
         {
-            String sub = s.substring(i, i + size);
-            if (wordIndexes.containsKey(sub))
+            int windowSize = 0;
+            Map<String, Integer> window = new HashMap<>();
+            for (int j = 0; i + (j + 1) * size <= s.length(); j++)
             {
-                indexesInString.put(i, wordIndexes.get(sub));
-            }
-        }
-
-        List<Integer> stringIndexes = new ArrayList<>(indexesInString.keySet());
-        Collections.sort(stringIndexes);
-        for (int startIndex : stringIndexes)
-        {
-            if (startIndex + size * words.length > s.length())
-            {
-                break;
-            }
-            Map<Integer, Integer> counts = new HashMap<>(wordCount);
-            for (int i = 0; i < words.length; i++)
-            {
-                int unresolvedIndex = startIndex + i * size;
-                Integer wordIndex = indexesInString.get(unresolvedIndex);
-                if (wordIndex == null || counts.get(wordIndex) == 0)
+                String sub = s.substring(i + j * size, i + (j + 1) * size);
+                if (!wordCount.containsKey(sub))
                 {
-                    break;
+                    window.clear();
+                    windowSize = 0;
                 }
-                counts.put(wordIndex, counts.get(wordIndex) - 1);
-            }
-            if (counts.values().stream().mapToInt(Integer::intValue).sum() == 0)
-            {
-                indexes.add(startIndex);
+                windowSize++;
+                window.put(sub, window.getOrDefault(sub, 0) + 1);
+                boolean isFound = true;
+                for (String word : wordCount.keySet())
+                {
+                    if (wordCount.get(word) != window.get(word))
+                    {
+                        isFound = false;
+                        break;
+                    }
+                }
+                int startIndex = i + (j + 1 - words.length) * size;
+                if (isFound)
+                {
+                    indexes.add(startIndex);
+                }
+                if (windowSize == words.length)
+                {
+                    String startSub = s.substring(startIndex, startIndex + size);
+                    int count = window.get(startSub);
+                    if (count == 1)
+                    {
+                        window.remove(startSub);
+                    }
+                    else
+                    {
+                        window.put(startSub, count - 1);
+                    }
+                    windowSize--;
+                }
             }
         }
 
@@ -78,8 +87,8 @@ public class SubstringWithConcatenationOfAllWords
 
     public static void main(String[] args)
     {
-        String s = "abababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababab";
-        String[] words = {"ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba", "ab", "ba"};
+        String s = "wordgoodgoodgoodbestword";
+        String[] words = {"word", "good", "best", "good"};
         LocalDateTime start = LocalDateTime.now();
         System.out.println(new SubstringWithConcatenationOfAllWords().findSubstring(s, words));
         LocalDateTime end = LocalDateTime.now();
