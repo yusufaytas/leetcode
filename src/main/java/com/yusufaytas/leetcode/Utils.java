@@ -53,4 +53,20 @@ public class Utils
     }
 
 
+    static ListNode generateListNode(int... nums)
+    {
+        if (nums.length == 0)
+        {
+            return null;
+        }
+        final ListNode head = new ListNode(nums[0]);
+        ListNode current = head;
+        for (int i = 1; i < nums.length; i++)
+        {
+            final ListNode newNode = new ListNode(nums[i]);
+            current.next = newNode;
+            current = current.next;
+        }
+        return head;
+    }
 }
