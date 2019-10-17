@@ -39,18 +39,24 @@ public class LongestIncreasingSubsequence
             list.add(nums[index]);
             return lengthOfLIS(nums, index + 1, list);
         }
+        if (list.size() == 1)
+        {
+            list.remove(0);
+            list.add(nums[index]);
+            return lengthOfLIS(nums, index + 1, list);
+        }
         final int newIndex = Math.abs(Collections.binarySearch(list, nums[index]));
         final List<Integer> newList = new ArrayList<>(newIndex);
         for (int i = 0; i < newIndex - 1; i++)
         {
             newList.add(list.get(i));
         }
-        return Math.max(lengthOfLIS(nums, index, newList), lengthOfLIS(nums, index + 1, list));
+        return Math.max(lengthOfLIS(nums, index + 1, list), lengthOfLIS(nums, index, newList));
     }
 
     public static void main(String[] args)
     {
-        final int[] nums = {10, 9, 2, 5, 0, 1, 3, 4};
+        final int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
         System.out.println(new LongestIncreasingSubsequence().lengthOfLIS(nums));
     }
 }
