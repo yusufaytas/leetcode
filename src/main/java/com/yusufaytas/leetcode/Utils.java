@@ -26,6 +26,18 @@ public class Utils
         }
     }
 
+    static void printMatrix(final boolean[][] matrix)
+    {
+        for (int i = 0; i < matrix.length; i++)
+        {
+            for (int j = 0; j < matrix[i].length; j++)
+            {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
     static int min(final int... numbers)
     {
         int min = Integer.MAX_VALUE;

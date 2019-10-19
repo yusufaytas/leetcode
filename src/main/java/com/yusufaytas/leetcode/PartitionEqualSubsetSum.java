@@ -1,5 +1,7 @@
 package com.yusufaytas.leetcode;
 
+import java.util.Arrays;
+
 /*
 Given a non-empty array containing only positive integers, find if the array can be partitioned into
 two subsets such that the sum of elements in both subsets is equal.
@@ -24,23 +26,34 @@ public class PartitionEqualSubsetSum
 {
     public boolean canPartition(final int[] nums)
     {
-        return canPartition(nums, 0, 0, 0);
-    }
-
-    public boolean canPartition(final int[] nums, int index, final int left, final int right)
-    {
-        if (index == nums.length)
+        final int sum = Arrays.stream(nums).sum();
+        if (sum % 2 == 1 || nums.length < 2)
         {
-            return left == right;
+            return false;
         }
-        final int current = nums[index++];
-        return canPartition(nums, index, left + current, right) ||
-                canPartition(nums, index, left, right + current);
+        final int halfSum = sum / 2;
+        final boolean[][] sums = new boolean[nums.length + 1][halfSum + 1];
+        for (int i = 0; i <= nums.length; i++)
+        {
+            sums[i][0] = true;
+        }
+        for (int i = 1; i <= nums.length; i++)
+        {
+            for (int j = 1; j <= halfSum; j++)
+            {
+                if (j - nums[i - 1] >= 0)
+                {
+                    sums[i][j] = sums[i - 1][j] || sums[i - 1][j - nums[i - 1]];
+                }
+            }
+        }
+
+        return sums[nums.length][halfSum];
     }
 
     public static void main(String[] args)
     {
-        final int[] nums = {1, 2, 3, 5};
+        final int[] nums = {2, 2, 3, 5, 10};
         System.out.println(new PartitionEqualSubsetSum().canPartition(nums));
     }
 }
