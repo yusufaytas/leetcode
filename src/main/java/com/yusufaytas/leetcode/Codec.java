@@ -1,8 +1,8 @@
 package com.yusufaytas.leetcode;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 /*
@@ -40,37 +40,9 @@ public class Codec
     {
         if (root == null)
         {
-            return "";
+            return ",";
         }
-        Object nums[] = new Object[1];
-        final Stack<TreeNode> nodeStack = new Stack<>();
-        final Stack<Integer> depthStack = new Stack<>();
-        nodeStack.push(root);
-        depthStack.push(0);
-        while (!nodeStack.isEmpty())
-        {
-            final TreeNode currentNode = nodeStack.pop();
-            final int currentIndex = depthStack.pop();
-            if (currentIndex >= nums.length)
-            {
-                nums = Arrays.copyOf(nums, 2 * (nums.length + 1) - 1);
-            }
-            nums[currentIndex] = currentNode.val;
-            final int rightIndex = 2 * (currentIndex + 1);
-            final int leftIndex = rightIndex - 1;
-            if (currentNode.left != null)
-            {
-                nodeStack.push(currentNode.left);
-                depthStack.push(leftIndex);
-            }
-            if (currentNode.right != null)
-            {
-                nodeStack.push(currentNode.right);
-                depthStack.push(rightIndex);
-            }
-        }
-        return Arrays.stream(nums).map(o -> o == null ? "" : o.toString())
-                .collect(Collectors.joining(","));
+        return root.val + "," + serialize(root.left) + serialize(root.right);
     }
 
     // Decodes your encoded data to tree.
@@ -80,25 +52,24 @@ public class Codec
         {
             return null;
         }
-        final List<TreeNode> nodes = Arrays
+        final Queue<String> nodes = Arrays
                 .stream(data.split(","))
                 .map(String::trim)
-                .map(s -> s.isEmpty() ? null : new TreeNode(Integer.parseInt(s)))
-                .collect(Collectors.toList());
-        for (int i = 0; i < nodes.size(); i++)
+                .collect(Collectors.toCollection(ArrayDeque::new));
+        return constructTree(nodes);
+    }
+
+    private TreeNode constructTree(final Queue<String> nodes)
+    {
+        final String val = nodes.poll();
+        if (val == null || val.isEmpty())
         {
-            final int rightIndex = 2 * (i + 1);
-            final int leftIndex = rightIndex - 1;
-            if (rightIndex < nodes.size() && nodes.get(rightIndex) != null)
-            {
-                nodes.get(i).right = nodes.get(rightIndex);
-            }
-            if (leftIndex < nodes.size() && nodes.get(leftIndex) != null)
-            {
-                nodes.get(i).left = nodes.get(leftIndex);
-            }
+            return null;
         }
-        return nodes.get(0);
+        final TreeNode treeNode = new TreeNode(Integer.parseInt(val));
+        treeNode.left = constructTree(nodes);
+        treeNode.right = constructTree(nodes);
+        return treeNode;
     }
 
     public static void main(String[] args)
@@ -110,5 +81,6 @@ public class Codec
         treeNode.left = new TreeNode(2);
         treeNode.left.right = new TreeNode(10);
         System.out.println(codec.serialize(treeNode));
+        System.out.println(codec.serialize(codec.deserialize(codec.serialize(treeNode))));
     }
 }
