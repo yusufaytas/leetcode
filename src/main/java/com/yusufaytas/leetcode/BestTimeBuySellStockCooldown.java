@@ -11,7 +11,7 @@ as you like (ie, buy one and sell one share of the stock multiple times) with th
 
 Example:
 
-Input: [1,2,3,0,2]
+Input: [1,2,3,0,2,5,2,8]
 Output: 3
 Explanation: transactions = [buy, sell, cooldown, buy, sell]
 
@@ -24,50 +24,45 @@ public class BestTimeBuySellStockCooldown
         {
             return 0;
         }
-        final int[][] profits = new int[prices.length][prices.length];
-        maxProfit(prices, profits, 0, prices.length - 1);
-        return profits[0][profits.length - 1];
+        final int[][] profits = new int[prices.length][3];
+        return maxProfit(prices, profits, 0, 0);
     }
 
-    private void maxProfit(final int[] prices, final int[][] profits, int start, int end)
+    //state=0 noStock, state=1 => hasStock, state=2 => cooldown
+    public int maxProfit(final int[] prices, final int[][] profits,
+                         final int start, final int state)
     {
-        if (start >= end)
+        if (start == prices.length)
         {
-            return;
+            return 0;
         }
-        if (profits[start][end] != 0)
+        if (profits[start][state] != 0)
         {
-            return;
+            return profits[start][state];
         }
-        int localMin = Integer.MAX_VALUE, localMax = Integer.MIN_VALUE, max = 0;
-        for (int i = start; i <= end; i++)
+        int buyProfit = Integer.MIN_VALUE, sellProfit = Integer.MIN_VALUE, coolDown = Integer.MIN_VALUE;
+        if (state == 0)
         {
-            if (prices[i] < localMin)
-            {
-                localMin = prices[i];
-                localMax = prices[i];
-            }
-            if (prices[i] > localMax)
-            {
-                localMax = prices[i];
-            }
-            max = Math.max(localMax - localMin, max);
+            buyProfit = Math.max(maxProfit(prices, profits, start + 1, 1) - prices[start],
+                    maxProfit(prices, profits, start + 1, 0));
+
         }
-        for (int i = start; i < end - 1; i++)
+        else if (state == 1)
         {
-            maxProfit(prices, profits, start, i + 1);
-            maxProfit(prices, profits, i + 3, end);
-            if (i + 3 <= end)
-            {
-                max = Math.max(profits[start][i + 1] + profits[i + 3][end], max);
-            }
+            sellProfit = Math.max(maxProfit(prices, profits, start + 1, 2) + prices[start],
+                    maxProfit(prices, profits, start + 1, 1));
         }
-        profits[start][end] = max;
+        else
+        {
+            coolDown = maxProfit(prices, profits, start + 1, 0);
+        }
+        profits[start][state] = Math.max(buyProfit, Math.max(sellProfit, coolDown));
+        return profits[start][state];
     }
 
     public static void main(String[] args)
     {
-        int[] prices = {1, 2, 3, 0, 2, 5, 21, 1, 1, 1, 32, 32, 3, 2, 3, 23};
+        int[] prices = {1, 2, 3, 0, 2};
         System.out.println(new BestTimeBuySellStockCooldown().maxProfit(prices));
     }
 }
