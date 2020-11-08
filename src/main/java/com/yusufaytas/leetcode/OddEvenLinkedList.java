@@ -17,7 +17,7 @@ Input: 2->1->3->5->6->4->7->NULL
 Output: 2->3->6->7->1->5->4->NULL
 
  */
-public class OddEvenLinkedList
+    public class OddEvenLinkedList
 {
     public ListNode oddEvenList(final ListNode head)
     {
