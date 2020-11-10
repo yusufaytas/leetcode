@@ -11,7 +11,7 @@ your output should be [1, 1, 4, 2, 1, 1, 0, 0].
 Note: The length of temperatures will be in the range [1, 30000].
 Each temperature will be an integer in the range [30, 100].
  */
-public class DailyTemperatures
+    public class DailyTemperatures
 {
     public int[] dailyTemperatures(final int[] temperatures)
     {
