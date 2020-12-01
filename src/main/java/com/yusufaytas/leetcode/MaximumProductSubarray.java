@@ -18,26 +18,22 @@ Output: 0
 Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
 
  */
-public class MaximumProductSubarray
-{
-    public int maxProduct(final int[] nums)
-    {
-        if (nums.length == 0)
-        {
-            return 0;
-        }
-        int max = Integer.MIN_VALUE;
-        for (int i = 0; i < nums.length; i++)
-        {
-            int prev = nums[i];
-            max = Math.max(prev, max);
-            for (int j = i + 1; j < nums.length; j++)
-            {
-                prev *= nums[j];
-                max = Math.max(prev, max);
-            }
-        }
-        return max;
+public class MaximumProductSubarray {
+
+  public int maxProduct(final int[] nums) {
+    if (nums.length == 0) {
+      return 0;
     }
-    
+    int max = Integer.MIN_VALUE;
+    for (int i = 0; i < nums.length; i++) {
+      int prev = nums[i];
+      max = Math.max(prev, max);
+      for (int j = i + 1; j < nums.length; j++) {
+        prev *= nums[j];
+        max = Math.max(prev, max);
+      }
+    }
+    return max;
+  }
+
 }

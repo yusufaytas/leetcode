@@ -39,42 +39,36 @@ A solution set is:
 
 
  */
-public class CombinationSum
-{
-    public List<List<Integer>> combinationSum(int[] candidates, int target)
-    {
-        final Set<List<Integer>> visited = new HashSet<>();
-        final Set<List<Integer>> found = new HashSet<>();
-        combinationSum(candidates, target, new ArrayList<>(), visited, found);
-        return found.stream().collect(Collectors.toList());
-    }
+public class CombinationSum {
 
-    public void combinationSum(final int[] candidates, final int target, final List<Integer> path,
-                               final Set<List<Integer>> visited, final Set<List<Integer>> found)
-    {
-        if (target == 0)
-        {
-            found.add(path);
-        }
-        if (target < 0 || visited.contains(candidates))
-        {
-            return;
-        }
-        for (int i = 0; i < candidates.length; i++)
-        {
-            final List<Integer> newPath = new ArrayList<>(path);
-            newPath.add(candidates[i]);
-            Collections.sort(newPath);
-            visited.add(newPath);
-            combinationSum(candidates, target - candidates[i], newPath, visited, found);
-        }
-    }
+  public static void main(String[] args) {
+    final int target = 8;
+    final int[] candidates = {2, 3, 5};
+    System.out.println(new CombinationSum().combinationSum(candidates, target));
+  }
 
-    public static void main(String[] args)
-    {
-        final int target = 8;
-        final int[] candidates = {2, 3, 5};
-        System.out.println(new CombinationSum().combinationSum(candidates, target));
+  public List<List<Integer>> combinationSum(int[] candidates, int target) {
+    final Set<List<Integer>> visited = new HashSet<>();
+    final Set<List<Integer>> found = new HashSet<>();
+    combinationSum(candidates, target, new ArrayList<>(), visited, found);
+    return found.stream().collect(Collectors.toList());
+  }
+
+  public void combinationSum(final int[] candidates, final int target, final List<Integer> path,
+      final Set<List<Integer>> visited, final Set<List<Integer>> found) {
+    if (target == 0) {
+      found.add(path);
     }
+    if (target < 0 || visited.contains(candidates)) {
+      return;
+    }
+    for (int i = 0; i < candidates.length; i++) {
+      final List<Integer> newPath = new ArrayList<>(path);
+      newPath.add(candidates[i]);
+      Collections.sort(newPath);
+      visited.add(newPath);
+      combinationSum(candidates, target - candidates[i], newPath, visited, found);
+    }
+  }
 
 }

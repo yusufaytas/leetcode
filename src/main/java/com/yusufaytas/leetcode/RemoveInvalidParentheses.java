@@ -29,75 +29,55 @@ Input: ")("
 Output: [""]
 
  */
-public class RemoveInvalidParentheses
-{
+public class RemoveInvalidParentheses {
 
-    public List<String> removeInvalidParentheses(final String s)
-    {
-        final Queue<String> queue = new ArrayDeque<>();
-        final Set<String> visited = new HashSet<>();
-        final List<String> validParentheses = new ArrayList<>();
-        queue.add(s);
-        while (!queue.isEmpty())
-        {
-            final String current = queue.poll();
-            if (visited.contains(current))
-            {
-                continue;
-            }
-            if (!validParentheses.isEmpty() && validParentheses.get(0).length() > current.length())
-            {
-                break;
-            }
-            visited.add(current);
-            if (hasValidParentheses(current))
-            {
-                validParentheses.add(current);
-            }
-            else
-            {
-                for (int i = 0; i < current.length(); i++)
-                {
-                    queue.add(current.substring(0, i) + current.substring(i + 1));
-                }
-            }
-        }
-        return validParentheses;
-    }
+  public static void main(final String[] args) {
+    final String s = "l)((j())()()))((";
+    System.out.println(new RemoveInvalidParentheses().removeInvalidParentheses(s));
+  }
 
-    public boolean hasValidParentheses(final String s)
-    {
-        if (s.isEmpty())
-        {
-            return true;
+  public List<String> removeInvalidParentheses(final String s) {
+    final Queue<String> queue = new ArrayDeque<>();
+    final Set<String> visited = new HashSet<>();
+    final List<String> validParentheses = new ArrayList<>();
+    queue.add(s);
+    while (!queue.isEmpty()) {
+      final String current = queue.poll();
+      if (visited.contains(current)) {
+        continue;
+      }
+      if (!validParentheses.isEmpty() && validParentheses.get(0).length() > current.length()) {
+        break;
+      }
+      visited.add(current);
+      if (hasValidParentheses(current)) {
+        validParentheses.add(current);
+      } else {
+        for (int i = 0; i < current.length(); i++) {
+          queue.add(current.substring(0, i) + current.substring(i + 1));
         }
-        final Stack<Character> stack = new Stack<>();
-        for (int i = 0; i < s.length(); i++)
-        {
-            if (s.charAt(i) == '(')
-            {
-                stack.push('(');
-            }
-            else if (s.charAt(i) != ')')
-            {
-                continue;
-            }
-            else if (stack.isEmpty())
-            {
-                return false;
-            }
-            else
-            {
-                stack.pop();
-            }
-        }
-        return stack.isEmpty();
+      }
     }
+    return validParentheses;
+  }
 
-    public static void main(final String[] args)
-    {
-        final String s = "l)((j())()()))((";
-        System.out.println(new RemoveInvalidParentheses().removeInvalidParentheses(s));
+  public boolean hasValidParentheses(final String s) {
+    if (s.isEmpty()) {
+      return true;
     }
+    final Stack<Character> stack = new Stack<>();
+    for (int i = 0; i < s.length(); i++) {
+      if (s.charAt(i) == '(') {
+        stack.push('(');
+      } else if (s.charAt(i) != ')') {
+        continue;
+      } else if (stack.isEmpty()) {
+        return false;
+      } else {
+        stack.pop();
+      }
+    }
+    return stack.isEmpty();
+  }
 
 }

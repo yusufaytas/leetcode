@@ -26,48 +26,39 @@ Explanation: You will always arrive at index 3 no matter what. Its maximum
 
 
  */
-public class JumpGame
-{
-    public boolean canJump(final int[] nums)
-    {
-        if (nums.length == 0)
-        {
-            return true;
-        }
-        final Stack<Integer> jumps = new Stack<>();
-        final Set<Integer> visited = new HashSet<>();
-        jumps.push(0);
-        while (!jumps.isEmpty())
-        {
-            final int current = jumps.pop();
-            if (current == nums.length - 1)
-            {
-                return true;
-            }
-            for (int i = 1; i <= nums[current]; i++)
-            {
-                final int nextIndex = current + i;
-                if (nextIndex >= nums.length - 1)
-                {
-                    return true;
-                }
-                if (nums[nextIndex] > nums[current] - i)
-                {
-                    visited.add(nextIndex);
-                    jumps.push(nextIndex);
-                }
-                if (visited.contains(nextIndex))
-                {
-                    continue;
-                }
-            }
-        }
-        return false;
-    }
+public class JumpGame {
 
-    public static void main(String[] args)
-    {
-        int nums[] = {1, 1, 2, 2, 0, 1, 1};
-        System.out.println(new JumpGame().canJump(nums));
+  public static void main(String[] args) {
+    int nums[] = {1, 1, 2, 2, 0, 1, 1};
+    System.out.println(new JumpGame().canJump(nums));
+  }
+
+  public boolean canJump(final int[] nums) {
+    if (nums.length == 0) {
+      return true;
     }
+    final Stack<Integer> jumps = new Stack<>();
+    final Set<Integer> visited = new HashSet<>();
+    jumps.push(0);
+    while (!jumps.isEmpty()) {
+      final int current = jumps.pop();
+      if (current == nums.length - 1) {
+        return true;
+      }
+      for (int i = 1; i <= nums[current]; i++) {
+        final int nextIndex = current + i;
+        if (nextIndex >= nums.length - 1) {
+          return true;
+        }
+        if (nums[nextIndex] > nums[current] - i) {
+          visited.add(nextIndex);
+          jumps.push(nextIndex);
+        }
+        if (visited.contains(nextIndex)) {
+          continue;
+        }
+      }
+    }
+    return false;
+  }
 }

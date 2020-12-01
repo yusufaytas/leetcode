@@ -40,26 +40,22 @@ Constraints:
     You may assume k is always valid, 1 ≤ k ≤ BST's total elements.
 
  */
-public class KthSmallestElementInBST
-{
-    public int kthSmallest(final TreeNode root, int k)
-    {
-        if (root == null)
-        {
-            return -1;
-        }
-        final List<Integer> numbers = new ArrayList<>();
-        inOrderTraversal(root, numbers);
-        return numbers.get(k - 1);
-    }
+public class KthSmallestElementInBST {
 
-    private void inOrderTraversal(final TreeNode root, final List<Integer> numbers)
-    {
-        if (root != null)
-        {
-            inOrderTraversal(root.left, numbers);
-            numbers.add(root.val);
-            inOrderTraversal(root.right, numbers);
-        }
+  public int kthSmallest(final TreeNode root, int k) {
+    if (root == null) {
+      return -1;
     }
+    final List<Integer> numbers = new ArrayList<>();
+    inOrderTraversal(root, numbers);
+    return numbers.get(k - 1);
+  }
+
+  private void inOrderTraversal(final TreeNode root, final List<Integer> numbers) {
+    if (root != null) {
+      inOrderTraversal(root.left, numbers);
+      numbers.add(root.val);
+      inOrderTraversal(root.right, numbers);
+    }
+  }
 }

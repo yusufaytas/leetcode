@@ -56,54 +56,43 @@ Input: version1 = "7.5.2.4", version2 = "7.5.3"
 Output: -1
 
  */
-public class CompareVersionNumbers
-{
-    public int compareVersion(final String version1, final String version2)
-    {
-        final Queue<Integer> v1 = Stream.of(version1.split("\\."))
-                .map(s -> Integer.parseInt(s))
-                .collect(Collectors.toCollection(LinkedList::new));
+public class CompareVersionNumbers {
 
-        final Queue<Integer> v2 = Stream.of(version2.split("\\."))
-                .map(s -> Integer.parseInt(s))
-                .collect(Collectors.toCollection(LinkedList::new));
+  public static void main(String[] args) {
+    final String v1 = "1.0.1";
+    final String v2 = "1.01";
+    System.out.println(new CompareVersionNumbers().compareVersion(v1, v2));
+  }
 
-        while (!v1.isEmpty() && !v2.isEmpty())
-        {
-            int currentV1 = v1.poll();
-            int currentV2 = v2.poll();
-            if (currentV1 > currentV2)
-            {
-                return 1;
-            }
-            else if (currentV2 > currentV1)
-            {
-                return -1;
-            }
-        }
-        while (!v1.isEmpty() && v1.peek() == 0)
-        {
-            v1.poll();
-        }
-        while (!v2.isEmpty() && v2.peek() == 0)
-        {
-            v2.poll();
-        }
-        if (v1.size() > v2.size())
-        {
-            return 1;
-        }
-        else if (v2.size() > v1.size())
-        {
-            return -1;
-        }
-        return 0;
+  public int compareVersion(final String version1, final String version2) {
+    final Queue<Integer> v1 = Stream.of(version1.split("\\."))
+        .map(s -> Integer.parseInt(s))
+        .collect(Collectors.toCollection(LinkedList::new));
+
+    final Queue<Integer> v2 = Stream.of(version2.split("\\."))
+        .map(s -> Integer.parseInt(s))
+        .collect(Collectors.toCollection(LinkedList::new));
+
+    while (!v1.isEmpty() && !v2.isEmpty()) {
+      int currentV1 = v1.poll();
+      int currentV2 = v2.poll();
+      if (currentV1 > currentV2) {
+        return 1;
+      } else if (currentV2 > currentV1) {
+        return -1;
+      }
     }
-
-    public static void main(String[] args)
-    {
-        final String v1 = "1.0.1";
-        final String v2 = "1.01";
-        System.out.println(new CompareVersionNumbers().compareVersion(v1, v2));
+    while (!v1.isEmpty() && v1.peek() == 0) {
+      v1.poll();
     }
+    while (!v2.isEmpty() && v2.peek() == 0) {
+      v2.poll();
+    }
+    if (v1.size() > v2.size()) {
+      return 1;
+    } else if (v2.size() > v1.size()) {
+      return -1;
+    }
+    return 0;
+  }
 }

@@ -18,174 +18,148 @@ Note:
 The length of the given array will not exceed 50,000.
 All the numbers in the input array are in the range of 32-bit integer.
  */
-public class ReversePairs
-{
-    public int reversePairs(int[] nums)
-    {
+public class ReversePairs {
 
-        if (nums == null || nums.length == 0)
-        {
-            return 0;
-        }
+  public int reversePairs(int[] nums) {
 
-        int n = nums.length;
-
-        TreeNode root = new TreeNode(nums[0]);
-        int count = 0;
-        for (int i = 1; i < nums.length; i++)
-        {
-            count += search(root, (long) nums[i] * 2);
-            root = insert(root, (long) nums[i]);
-        }
-
-        return count;
-
+    if (nums == null || nums.length == 0) {
+      return 0;
     }
 
-    private int search(TreeNode root, long key)
-    {
+    int n = nums.length;
 
-        if (root == null)
-        {
-            return 0;
-        }
-
-        if (key < root.value)
-        {       // key < root.value:  go left
-            return root.rightCount + search(root.left, key);
-        }
-        else
-        {                    // key >= root.value: go right
-            return search(root.right, key);
-        }
+    TreeNode root = new TreeNode(nums[0]);
+    int count = 0;
+    for (int i = 1; i < nums.length; i++) {
+      count += search(root, (long) nums[i] * 2);
+      root = insert(root, (long) nums[i]);
     }
 
-    private TreeNode insert(TreeNode root, long key)
-    {
+    return count;
 
-        if (root == null)
-        {
-            return new TreeNode(key);
-        }
+  }
 
-        if (key < root.value)
-        {   // key < root.value:  go left
-            root.left = insert(root.left, key);
-        }
-        else if (key == root.value)
-        {
-            root.rightCount++;
-            return root;
-        }
-        else
-        {
-            root.rightCount++;
-            root.right = insert(root.right, key);
-        }
+  private int search(TreeNode root, long key) {
 
-        root.height = Math.max(getHeight(root.left), getHeight(root.right)) + 1;
-
-        int balance = getBalance(root);
-
-        // case 1 left left
-        if (balance > 1 && getHeight(root.left.left) > getHeight(root.left.right))
-        {
-            return rightRotate(root);
-        }
-
-        // case 2 left right
-        if (balance > 1 && getHeight(root.left.left) < getHeight(root.left.right))
-        {
-            root.left = leftRotate(root.left);
-            return rightRotate(root);
-        }
-
-        // case 3 right right
-        if (balance < -1 && getHeight(root.right.left) < getHeight(root.right.right))
-        {
-            return leftRotate(root);
-        }
-
-        // case 4 right left
-        if (balance < -1 && getHeight(root.right.left) > getHeight(root.right.right))
-        {
-            root.right = rightRotate(root.right);
-            return leftRotate(root);
-        }
-
-        return root;
+    if (root == null) {
+      return 0;
     }
 
-    private TreeNode leftRotate(TreeNode root)
-    {
+    if (key < root.value) {       // key < root.value:  go left
+      return root.rightCount + search(root.left, key);
+    } else {                    // key >= root.value: go right
+      return search(root.right, key);
+    }
+  }
 
-        // setp 1: take care of nodes
-        TreeNode newRoot = root.right;
-        TreeNode b = newRoot.left;
+  private TreeNode insert(TreeNode root, long key) {
 
-        newRoot.left = root;
-        root.right = b;
-
-        // step 2: take care of height
-        root.height = Math.max(getHeight(root.left), getHeight(root.right)) + 1;
-        newRoot.height = Math.max(getHeight(newRoot.left), getHeight(newRoot.right)) + 1;
-
-        // step 3: take care of rightCount
-        root.rightCount -= getRightCount(newRoot);
-
-        return newRoot;
+    if (root == null) {
+      return new TreeNode(key);
     }
 
-    private TreeNode rightRotate(TreeNode root)
-    {
-
-        // setp 1: take care of nodes
-        TreeNode newRoot = root.left;
-        TreeNode b = newRoot.right;
-
-        newRoot.right = root;
-        root.left = b;
-
-        // step 2: take care of height
-        root.height = Math.max(getHeight(root.left), getHeight(root.right)) + 1;
-        newRoot.height = Math.max(getHeight(newRoot.left), getHeight(newRoot.right)) + 1;
-
-        // step 3: take care of rightCount
-        newRoot.rightCount += getRightCount(root);
-
-        return newRoot;
+    if (key < root.value) {   // key < root.value:  go left
+      root.left = insert(root.left, key);
+    } else if (key == root.value) {
+      root.rightCount++;
+      return root;
+    } else {
+      root.rightCount++;
+      root.right = insert(root.right, key);
     }
 
+    root.height = Math.max(getHeight(root.left), getHeight(root.right)) + 1;
 
-    private int getHeight(TreeNode node)
-    {
-        return node == null ? 0 : node.height;
+    int balance = getBalance(root);
+
+    // case 1 left left
+    if (balance > 1 && getHeight(root.left.left) > getHeight(root.left.right)) {
+      return rightRotate(root);
     }
 
-    private int getBalance(TreeNode node)
-    {
-        return node == null ? 0 : getHeight(node.left) - getHeight(node.right);
+    // case 2 left right
+    if (balance > 1 && getHeight(root.left.left) < getHeight(root.left.right)) {
+      root.left = leftRotate(root.left);
+      return rightRotate(root);
     }
 
-    private int getRightCount(TreeNode node)
-    {
-        return node == null ? 0 : node.rightCount;
+    // case 3 right right
+    if (balance < -1 && getHeight(root.right.left) < getHeight(root.right.right)) {
+      return leftRotate(root);
     }
 
-    class TreeNode
-    {
-
-        long value;
-        int rightCount;
-        int height;
-        TreeNode left;
-        TreeNode right;
-
-        public TreeNode(long value)
-        {
-            this.value = value;
-            height = 1;
-            rightCount = 1;
-        }
+    // case 4 right left
+    if (balance < -1 && getHeight(root.right.left) > getHeight(root.right.right)) {
+      root.right = rightRotate(root.right);
+      return leftRotate(root);
     }
+
+    return root;
+  }
+
+  private TreeNode leftRotate(TreeNode root) {
+
+    // setp 1: take care of nodes
+    TreeNode newRoot = root.right;
+    TreeNode b = newRoot.left;
+
+    newRoot.left = root;
+    root.right = b;
+
+    // step 2: take care of height
+    root.height = Math.max(getHeight(root.left), getHeight(root.right)) + 1;
+    newRoot.height = Math.max(getHeight(newRoot.left), getHeight(newRoot.right)) + 1;
+
+    // step 3: take care of rightCount
+    root.rightCount -= getRightCount(newRoot);
+
+    return newRoot;
+  }
+
+  private TreeNode rightRotate(TreeNode root) {
+
+    // setp 1: take care of nodes
+    TreeNode newRoot = root.left;
+    TreeNode b = newRoot.right;
+
+    newRoot.right = root;
+    root.left = b;
+
+    // step 2: take care of height
+    root.height = Math.max(getHeight(root.left), getHeight(root.right)) + 1;
+    newRoot.height = Math.max(getHeight(newRoot.left), getHeight(newRoot.right)) + 1;
+
+    // step 3: take care of rightCount
+    newRoot.rightCount += getRightCount(root);
+
+    return newRoot;
+  }
+
+
+  private int getHeight(TreeNode node) {
+    return node == null ? 0 : node.height;
+  }
+
+  private int getBalance(TreeNode node) {
+    return node == null ? 0 : getHeight(node.left) - getHeight(node.right);
+  }
+
+  private int getRightCount(TreeNode node) {
+    return node == null ? 0 : node.rightCount;
+  }
+
+  class TreeNode {
+
+    long value;
+    int rightCount;
+    int height;
+    TreeNode left;
+    TreeNode right;
+
+    public TreeNode(long value) {
+      this.value = value;
+      height = 1;
+      rightCount = 1;
+    }
+  }
 }

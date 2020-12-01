@@ -1,9 +1,8 @@
 package com.yusufaytas.leetcode;
 
-import java.util.Random;
-
-
 import static com.yusufaytas.leetcode.Utils.printArray;
+
+import java.util.Random;
 
 /*
 Given an integer array nums, design an algorithm to randomly shuffle the array.
@@ -41,49 +40,43 @@ Constraints:
 
 
  */
-public class ShuffleArray
-{
-    private final int[] original;
-    private final Random random;
+public class ShuffleArray {
 
-    public ShuffleArray(final int[] nums)
-    {
-        this.original = nums;
-        this.random = new Random(nums.length);
-    }
+  private final int[] original;
+  private final Random random;
 
-    /**
-     * Resets the array to its original configuration and return it.
-     */
-    public int[] reset()
-    {
-        return original;
-    }
+  public ShuffleArray(final int[] nums) {
+    this.original = nums;
+    this.random = new Random(nums.length);
+  }
 
-    /**
-     * Returns a random shuffling of the array.
-     */
-    public int[] shuffle()
-    {
-        final int[] shuffled = new int[original.length];
-        for (int i = 0; i < original.length; i++)
-        {
-            shuffled[i] = original[i];
-        }
-        for (int i = 0; i < original.length; i++)
-        {
-            final int randomIndex = random.nextInt(original.length);
-            final int temp = shuffled[randomIndex];
-            shuffled[randomIndex] = shuffled[i];
-            shuffled[i] = temp;
-        }
-        return shuffled;
-    }
+  public static void main(String args[]) {
+    final int[] nums = new int[]{1, 2, 3};
+    final ShuffleArray shuffleArray = new ShuffleArray(nums);
+    printArray(shuffleArray.shuffle());
+  }
 
-    public static void main(String args[])
-    {
-        final int[] nums = new int[]{1, 2, 3};
-        final ShuffleArray shuffleArray = new ShuffleArray(nums);
-        printArray(shuffleArray.shuffle());
+  /**
+   * Resets the array to its original configuration and return it.
+   */
+  public int[] reset() {
+    return original;
+  }
+
+  /**
+   * Returns a random shuffling of the array.
+   */
+  public int[] shuffle() {
+    final int[] shuffled = new int[original.length];
+    for (int i = 0; i < original.length; i++) {
+      shuffled[i] = original[i];
     }
+    for (int i = 0; i < original.length; i++) {
+      final int randomIndex = random.nextInt(original.length);
+      final int temp = shuffled[randomIndex];
+      shuffled[randomIndex] = shuffled[i];
+      shuffled[i] = temp;
+    }
+    return shuffled;
+  }
 }

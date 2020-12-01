@@ -16,44 +16,36 @@ Write the code that will take a string and make this conversion given a number o
 string convert(string text, int nRows);
 convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR".
  */
-public class ZigZagConversion
-{
-    public String convert(String s, int numRows)
-    {
-        if (numRows == 1)
-        {
-            return s;
-        }
+public class ZigZagConversion {
 
-        List<List<Character>> zigZagList = new ArrayList<List<Character>>();
-        for (int i = 0; i < numRows; i++)
-        {
-            zigZagList.add(new ArrayList<Character>());
-        }
-        for (int i = 0; i < s.length(); i++)
-        {
-            int index = getIndex(numRows, i);
-            zigZagList.get(index).add(s.charAt(i));
-        }
-        StringBuilder builder = new StringBuilder();
-        for (List<Character> characters : zigZagList)
-        {
-            for (Character character : characters)
-            {
-                builder.append(character);
-            }
-        }
-        return builder.toString();
+  public String convert(String s, int numRows) {
+    if (numRows == 1) {
+      return s;
     }
 
-    private int getIndex(int numRows, int i)
-    {
-        int index = i % (numRows + numRows - 2);
-        if (index >= numRows)
-        {
-            return 2 * numRows - index - 2;
-        }
-        return index;
+    List<List<Character>> zigZagList = new ArrayList<List<Character>>();
+    for (int i = 0; i < numRows; i++) {
+      zigZagList.add(new ArrayList<Character>());
     }
-    
+    for (int i = 0; i < s.length(); i++) {
+      int index = getIndex(numRows, i);
+      zigZagList.get(index).add(s.charAt(i));
+    }
+    StringBuilder builder = new StringBuilder();
+    for (List<Character> characters : zigZagList) {
+      for (Character character : characters) {
+        builder.append(character);
+      }
+    }
+    return builder.toString();
+  }
+
+  private int getIndex(int numRows, int i) {
+    int index = i % (numRows + numRows - 2);
+    if (index >= numRows) {
+      return 2 * numRows - index - 2;
+    }
+    return index;
+  }
+
 }

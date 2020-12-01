@@ -40,71 +40,64 @@ Constraints:
 
 //TODO: look at this, deleting the last element with replacement value is tricky.
  */
-public class InsertDeleteGetRandom
-{
-    /**
-     * Initialize your data structure here.
-     */
+public class InsertDeleteGetRandom {
 
-    final Map<Integer, Integer> mapToIndex;
-    final List<Integer> values;
+  /**
+   * Initialize your data structure here.
+   */
 
-    public InsertDeleteGetRandom()
-    {
-        mapToIndex = new HashMap<>();
-        values = new ArrayList<>();
+  final Map<Integer, Integer> mapToIndex;
+  final List<Integer> values;
+
+  public InsertDeleteGetRandom() {
+    mapToIndex = new HashMap<>();
+    values = new ArrayList<>();
+  }
+
+  public static void main(String[] args) {
+    final InsertDeleteGetRandom random = new InsertDeleteGetRandom();
+    random.insert(0);
+    random.insert(1);
+    random.remove(0);
+    random.insert(2);
+    random.remove(1);
+    System.out.println(random.getRandom());
+  }
+
+  /**
+   * Inserts a value to the set. Returns true if the set did not already contain the specified
+   * element.
+   */
+  public boolean insert(final int val) {
+    if (mapToIndex.containsKey(val)) {
+      return false;
     }
+    mapToIndex.put(val, values.size());
+    values.add(val);
+    return true;
+  }
 
-    /**
-     * Inserts a value to the set. Returns true if the set did not already contain the specified element.
-     */
-    public boolean insert(final int val)
-    {
-        if (mapToIndex.containsKey(val))
-        {
-            return false;
-        }
-        mapToIndex.put(val, values.size());
-        values.add(val);
-        return true;
+  /**
+   * Removes a value from the set. Returns true if the set contained the specified element.
+   */
+  public boolean remove(final int val) {
+    if (mapToIndex.containsKey(val)) {
+      final int replacementValue = values.get(values.size() - 1);
+      final int usedIndex = mapToIndex.remove(val);
+      if (usedIndex != values.size() - 1) {
+        mapToIndex.put(replacementValue, usedIndex);
+        values.set(usedIndex, replacementValue);
+      }
+      values.remove(values.size() - 1);
+      return true;
     }
+    return false;
+  }
 
-    /**
-     * Removes a value from the set. Returns true if the set contained the specified element.
-     */
-    public boolean remove(final int val)
-    {
-        if (mapToIndex.containsKey(val))
-        {
-            final int replacementValue = values.get(values.size() - 1);
-            final int usedIndex = mapToIndex.remove(val);
-            if (usedIndex != values.size() - 1)
-            {
-                mapToIndex.put(replacementValue, usedIndex);
-                values.set(usedIndex, replacementValue);
-            }
-            values.remove(values.size() - 1);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Get a random element from the set.
-     */
-    public int getRandom()
-    {
-        return values.get((int) (values.size() * Math.random()));
-    }
-
-    public static void main(String[] args)
-    {
-        final InsertDeleteGetRandom random = new InsertDeleteGetRandom();
-        random.insert(0);
-        random.insert(1);
-        random.remove(0);
-        random.insert(2);
-        random.remove(1);
-        System.out.println(random.getRandom());
-    }
+  /**
+   * Get a random element from the set.
+   */
+  public int getRandom() {
+    return values.get((int) (values.size() * Math.random()));
+  }
 }

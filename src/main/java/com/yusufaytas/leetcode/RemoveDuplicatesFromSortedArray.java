@@ -11,23 +11,20 @@ Given nums = [1,1,2],
 Your function should return length = 2, with the first two elements of nums being 1 and 2 respectively.
 It doesn't matter what you leave beyond the returned length.
  */
-public class RemoveDuplicatesFromSortedArray
-{
-    public int removeDuplicates(final int[] nums) {
-        if(nums.length == 0)
-        {
-            return 0;
-        }
-        int count = 1, current = nums[0];
-        for(int i=1; i<nums.length; i++)
-        {
-            if(nums[i] != current)
-            {
-                current = nums[i];
-                nums[count] = current;
-                count++;
-            }
-        }
-        return count;
+public class RemoveDuplicatesFromSortedArray {
+
+  public int removeDuplicates(final int[] nums) {
+    if (nums.length == 0) {
+      return 0;
     }
+    int count = 1, current = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+      if (nums[i] != current) {
+        current = nums[i];
+        nums[count] = current;
+        count++;
+      }
+    }
+    return count;
+  }
 }

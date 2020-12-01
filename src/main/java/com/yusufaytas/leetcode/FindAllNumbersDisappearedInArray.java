@@ -19,22 +19,18 @@ Output:
 [5,6]
 
  */
-public class FindAllNumbersDisappearedInArray
-{
-    public List<Integer> findDisappearedNumbers(final int[] nums)
-    {
-        final List<Integer> disappearedNumbers = new ArrayList<>();
-        for (int i = 0; i < nums.length; i++)
-        {
-            nums[Math.abs(nums[i]) - 1] = -Math.abs(nums[Math.abs(nums[i]) - 1]);
-        }
-        for (int i = 0; i < nums.length; i++)
-        {
-            if (nums[i] > 0)
-            {
-                disappearedNumbers.add(i + 1);
-            }
-        }
-        return disappearedNumbers;
+public class FindAllNumbersDisappearedInArray {
+
+  public List<Integer> findDisappearedNumbers(final int[] nums) {
+    final List<Integer> disappearedNumbers = new ArrayList<>();
+    for (int i = 0; i < nums.length; i++) {
+      nums[Math.abs(nums[i]) - 1] = -Math.abs(nums[Math.abs(nums[i]) - 1]);
     }
+    for (int i = 0; i < nums.length; i++) {
+      if (nums[i] > 0) {
+        disappearedNumbers.add(i + 1);
+      }
+    }
+    return disappearedNumbers;
+  }
 }

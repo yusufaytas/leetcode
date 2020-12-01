@@ -25,37 +25,32 @@ minStack.pop();
 minStack.top();      --> Returns 0.
 minStack.getMin();   --> Returns -2.
  */
-public class MinStack
-{
-    /**
-     * initialize your data structure here.
-     */
-    final PriorityQueue<Integer> queue = new PriorityQueue<>();
-    final List<Integer> list = new LinkedList<>();
+public class MinStack {
 
-    public MinStack()
-    {
+  /**
+   * initialize your data structure here.
+   */
+  final PriorityQueue<Integer> queue = new PriorityQueue<>();
+  final List<Integer> list = new LinkedList<>();
 
-    }
+  public MinStack() {
 
-    public void push(int x)
-    {
-        queue.add(x);
-        list.add(0, x);
-    }
+  }
 
-    public void pop()
-    {
-        queue.remove(list.remove(0));
-    }
+  public void push(int x) {
+    queue.add(x);
+    list.add(0, x);
+  }
 
-    public int top()
-    {
-        return list.get(0);
-    }
+  public void pop() {
+    queue.remove(list.remove(0));
+  }
 
-    public int getMin()
-    {
-        return queue.peek();
-    }
+  public int top() {
+    return list.get(0);
+  }
+
+  public int getMin() {
+    return queue.peek();
+  }
 }

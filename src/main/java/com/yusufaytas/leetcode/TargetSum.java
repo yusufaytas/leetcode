@@ -28,35 +28,29 @@ Constraints:
 
 
  */
-public class TargetSum
-{
-    public int findTargetSumWays(int[] nums, int S)
-    {
-        if (nums == null || nums.length == 0)
-        {
-            return 0;
-        }
-        return findTargetSumWays(nums, 0, S);
-    }
+public class TargetSum {
 
-    public int findTargetSumWays(final int[] nums, final int index, final int target)
-    {
-        if (index == nums.length)
-        {
-            if (target == 0)
-            {
-                return 1;
-            }
-            return 0;
-        }
-        return findTargetSumWays(nums, index + 1, target - nums[index])
-                + findTargetSumWays(nums, index + 1, target + nums[index]);
-    }
+  public static void main(String[] args) {
+    final int[] nums = new int[]{1, 1, 1, 1, 1};
+    System.out.println(new TargetSum().findTargetSumWays(nums, 3));
+  }
 
-    public static void main(String[] args)
-    {
-        final int[] nums = new int[]{1, 1, 1, 1, 1};
-        System.out.println(new TargetSum().findTargetSumWays(nums, 3));
+  public int findTargetSumWays(int[] nums, int S) {
+    if (nums == null || nums.length == 0) {
+      return 0;
     }
+    return findTargetSumWays(nums, 0, S);
+  }
+
+  public int findTargetSumWays(final int[] nums, final int index, final int target) {
+    if (index == nums.length) {
+      if (target == 0) {
+        return 1;
+      }
+      return 0;
+    }
+    return findTargetSumWays(nums, index + 1, target - nums[index])
+        + findTargetSumWays(nums, index + 1, target + nums[index]);
+  }
 
 }

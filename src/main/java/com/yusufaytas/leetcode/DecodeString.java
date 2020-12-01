@@ -34,53 +34,45 @@ Input: s = "abc3[cd]xyz"
 Output: "abccdcdcdxyz"
 
  */
-public class DecodeString
-{
-    public String decodeString(final String s)
-    {
-        if (s == null || s.length() == 0)
-        {
-            return "";
-        }
-        final Stack<Integer> multiplierStack = new Stack<>();
-        final Stack<String> decodedStack = new Stack<>();
-        int parsedMultiplier = 0;
-        decodedStack.push("");
-        for (int i = 0; i < s.length(); i++)
-        {
-            final Character c = s.charAt(i);
-            if (c >= '0' && c <= '9')
-            {
-                parsedMultiplier = parsedMultiplier * 10 + c - '0';
-                continue;
-            }
-            if (c == '[')
-            {
-                multiplierStack.push(parsedMultiplier);
-                parsedMultiplier = 0;
-                decodedStack.push("");
-                continue;
-            }
-            if (c == ']')
-            {
-                final int multiplier = multiplierStack.pop();
-                String multiplied = decodedStack.pop();
-                String decoded = "";
-                for (int j = 0; j < multiplier; j++)
-                {
-                    decoded += multiplied;
-                }
-                decodedStack.push(decodedStack.pop() + decoded);
-                continue;
-            }
-            decodedStack.push(decodedStack.pop() + c);
-        }
-        return decodedStack.pop();
-    }
+public class DecodeString {
 
-    public static void main(String[] args)
-    {
-        final String s = "100[leetcode]";
-        System.out.println(new DecodeString().decodeString(s));
+  public static void main(String[] args) {
+    final String s = "100[leetcode]";
+    System.out.println(new DecodeString().decodeString(s));
+  }
+
+  public String decodeString(final String s) {
+    if (s == null || s.length() == 0) {
+      return "";
     }
+    final Stack<Integer> multiplierStack = new Stack<>();
+    final Stack<String> decodedStack = new Stack<>();
+    int parsedMultiplier = 0;
+    decodedStack.push("");
+    for (int i = 0; i < s.length(); i++) {
+      final Character c = s.charAt(i);
+      if (c >= '0' && c <= '9') {
+        parsedMultiplier = parsedMultiplier * 10 + c - '0';
+        continue;
+      }
+      if (c == '[') {
+        multiplierStack.push(parsedMultiplier);
+        parsedMultiplier = 0;
+        decodedStack.push("");
+        continue;
+      }
+      if (c == ']') {
+        final int multiplier = multiplierStack.pop();
+        String multiplied = decodedStack.pop();
+        String decoded = "";
+        for (int j = 0; j < multiplier; j++) {
+          decoded += multiplied;
+        }
+        decodedStack.push(decodedStack.pop() + decoded);
+        continue;
+      }
+      decodedStack.push(decodedStack.pop() + c);
+    }
+    return decodedStack.pop();
+  }
 }

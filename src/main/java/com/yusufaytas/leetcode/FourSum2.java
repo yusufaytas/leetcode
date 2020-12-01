@@ -27,52 +27,43 @@ The two tuples are:
 2. (1, 1, 0, 0) -> A[1] + B[1] + C[0] + D[0] = 2 + (-1) + (-1) + 0 = 0
 
  */
-public class FourSum2
-{
-    public int fourSumCount(final int[] A, final int[] B, final int[] C, final int[] D)
-    {
-        if (A == null || A.length == 0
-                || B == null || B.length == 0
-                || C == null || C.length == 0
-                || D == null || D.length == 0)
-        {
-            return 0;
-        }
-        final Map<Integer, Integer> aPlusB = new HashMap<>();
-        for (int i = 0; i < A.length; i++)
-        {
-            for (int j = 0; j < B.length; j++)
-            {
-                final int sum = A[i] + B[j];
-                aPlusB.put(sum, aPlusB.getOrDefault(sum, 0) + 1);
-            }
-        }
-        final Map<Integer, Integer> cPlusD = new HashMap<>();
-        for (int i = 0; i < C.length; i++)
-        {
-            for (int j = 0; j < D.length; j++)
-            {
-                final int sum = C[i] + D[j];
-                cPlusD.put(sum, cPlusD.getOrDefault(sum, 0) + 1);
-            }
-        }
-        int count = 0;
-        for (final Map.Entry<Integer, Integer> aAndB : aPlusB.entrySet())
-        {
-            if (cPlusD.containsKey(-aAndB.getKey()))
-            {
-                count += cPlusD.get(-aAndB.getKey()) * aAndB.getValue();
-            }
-        }
-        return count;
-    }
+public class FourSum2 {
 
-    public static void main(String[] args)
-    {
-        final int[] A = {1, 2};
-        final int[] B = {-2, -1};
-        final int[] C = {-1, 2};
-        final int[] D = {0, 2};
-        System.out.println(new FourSum2().fourSumCount(A, B, C, D));
+  public static void main(String[] args) {
+    final int[] A = {1, 2};
+    final int[] B = {-2, -1};
+    final int[] C = {-1, 2};
+    final int[] D = {0, 2};
+    System.out.println(new FourSum2().fourSumCount(A, B, C, D));
+  }
+
+  public int fourSumCount(final int[] A, final int[] B, final int[] C, final int[] D) {
+    if (A == null || A.length == 0
+        || B == null || B.length == 0
+        || C == null || C.length == 0
+        || D == null || D.length == 0) {
+      return 0;
     }
+    final Map<Integer, Integer> aPlusB = new HashMap<>();
+    for (int i = 0; i < A.length; i++) {
+      for (int j = 0; j < B.length; j++) {
+        final int sum = A[i] + B[j];
+        aPlusB.put(sum, aPlusB.getOrDefault(sum, 0) + 1);
+      }
+    }
+    final Map<Integer, Integer> cPlusD = new HashMap<>();
+    for (int i = 0; i < C.length; i++) {
+      for (int j = 0; j < D.length; j++) {
+        final int sum = C[i] + D[j];
+        cPlusD.put(sum, cPlusD.getOrDefault(sum, 0) + 1);
+      }
+    }
+    int count = 0;
+    for (final Map.Entry<Integer, Integer> aAndB : aPlusB.entrySet()) {
+      if (cPlusD.containsKey(-aAndB.getKey())) {
+        count += cPlusD.get(-aAndB.getKey()) * aAndB.getValue();
+      }
+    }
+    return count;
+  }
 }

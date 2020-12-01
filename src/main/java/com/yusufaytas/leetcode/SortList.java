@@ -15,52 +15,44 @@ Example 2:
 Input: -1->5->3->4->0
 Output: -1->0->3->4->5
  */
-public class SortList
-{
-    public ListNode sortList(final ListNode head)
-    {
-        ListNode current = head;
-        while (current != null && current.next != null)
-        {
-            current = current.next;
-        }
-        return sortList(head, current);
+public class SortList {
+
+  public static void main(String[] args) {
+    System.out.println(new SortList().sortList(generateListNode(5, 1, 4, 0, 7, 10, 11, 2)));
+  }
+
+  public ListNode sortList(final ListNode head) {
+    ListNode current = head;
+    while (current != null && current.next != null) {
+      current = current.next;
+    }
+    return sortList(head, current);
+  }
+
+  public ListNode sortList(final ListNode head, final ListNode endNode) {
+    if (head == null || head == endNode || head == endNode.next) {
+      return head;
+    }
+    final int pivot = head.val;
+    ListNode lessThanPivot = head, current = head.next;
+    while (current != null && current != endNode.next) {
+      if (current.val <= pivot) {
+        int temp = lessThanPivot.next.val;
+        lessThanPivot = lessThanPivot.next;
+        lessThanPivot.val = current.val;
+        current.val = temp;
+      }
+      current = current.next;
+    }
+    lessThanPivot.val = pivot;
+    sortList(head.next, lessThanPivot);
+    current = head;
+    while (current != lessThanPivot && current.next != null) {
+      current.val = current.next.val;
+      current = current.next;
     }
 
-    public ListNode sortList(final ListNode head, final ListNode endNode)
-    {
-        if(head == null || head == endNode || head == endNode.next)
-        {
-            return head;
-        }
-        final int pivot = head.val;
-        ListNode lessThanPivot = head, current = head.next;
-        while (current != null && current != endNode.next)
-        {
-            if(current.val <= pivot)
-            {
-                int temp = lessThanPivot.next.val;
-                lessThanPivot = lessThanPivot.next;
-                lessThanPivot.val = current.val;
-                current.val = temp;
-            }
-            current = current.next;
-        }
-        lessThanPivot.val = pivot;
-        sortList(head.next, lessThanPivot);
-        current = head;
-        while (current != lessThanPivot && current.next != null)
-        {
-            current.val = current.next.val;
-            current = current.next;
-        }
-        
-        sortList(lessThanPivot.next, endNode);
-        return head;
-    }
-
-    public static void main(String [] args)
-    {
-        System.out.println(new SortList().sortList(generateListNode(5,1,4,0,7,10,11,2)));
-    }
+    sortList(lessThanPivot.next, endNode);
+    return head;
+  }
 }

@@ -31,42 +31,37 @@ Explanation: The movement from index 1 -> 2 -> 1 -> ... is not a cycle, because 
 from index 1 -> 2 is a forward movement, but movement from index 2 -> 1 is a backward movement.
 All movements in a cycle must follow a single direction.
  */
-public class CircularArrayLoop
-{
-    public boolean circularArrayLoop(final int[] nums)
-    {
-        for (int i = 0; i < nums.length; i++)
-        {
-            int nextIndex = i;
-            int cycleLength = 0;
-            boolean isForward = nums[nextIndex] > 0;
-            final boolean[] visited = new boolean[nums.length];
-            do
-            {
-                if (nums[i] >= nums.length || visited[(nextIndex % nums.length + nums.length) % nums.length])
-                {
-                    break;
-                }
-                visited[(nextIndex % nums.length + nums.length) % nums.length] = true;
-                final int newNextIndex = nums[(nextIndex % nums.length + nums.length) % nums.length] + nextIndex;
-                if ((isForward && newNextIndex < nextIndex) || (!isForward && newNextIndex > nextIndex))
-                {
-                    break;
-                }
-                cycleLength++;
-                nextIndex = newNextIndex;
-                if ((nextIndex % nums.length + nums.length) % nums.length == i && cycleLength > 1)
-                {
-                    return true;
-                }
-            } while (!visited[(nextIndex % nums.length + nums.length) % nums.length]);
-        }
-        return false;
-    }
+public class CircularArrayLoop {
 
-    public static void main(String[] args)
-    {
-        final int[] nums = {-1,-1,-1};
-        System.out.println(new CircularArrayLoop().circularArrayLoop(nums));
+  public static void main(String[] args) {
+    final int[] nums = {-1, -1, -1};
+    System.out.println(new CircularArrayLoop().circularArrayLoop(nums));
+  }
+
+  public boolean circularArrayLoop(final int[] nums) {
+    for (int i = 0; i < nums.length; i++) {
+      int nextIndex = i;
+      int cycleLength = 0;
+      boolean isForward = nums[nextIndex] > 0;
+      final boolean[] visited = new boolean[nums.length];
+      do {
+        if (nums[i] >= nums.length || visited[(nextIndex % nums.length + nums.length)
+            % nums.length]) {
+          break;
+        }
+        visited[(nextIndex % nums.length + nums.length) % nums.length] = true;
+        final int newNextIndex =
+            nums[(nextIndex % nums.length + nums.length) % nums.length] + nextIndex;
+        if ((isForward && newNextIndex < nextIndex) || (!isForward && newNextIndex > nextIndex)) {
+          break;
+        }
+        cycleLength++;
+        nextIndex = newNextIndex;
+        if ((nextIndex % nums.length + nums.length) % nums.length == i && cycleLength > 1) {
+          return true;
+        }
+      } while (!visited[(nextIndex % nums.length + nums.length) % nums.length]);
     }
+    return false;
+  }
 }

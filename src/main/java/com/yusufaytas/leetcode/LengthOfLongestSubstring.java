@@ -11,34 +11,28 @@ Given "bbbbb", the answer is "b", with the length of 1.
 Given "pwwkew", the answer is "wke", with the length of 3.
 Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
  */
-public class LengthOfLongestSubstring
-{
-    public int lengthOfLongestSubstring(String s)
-    {
-        if (s == null)
-        {
-            return 0;
-        }
-        int maxLengthSoFar = 0;
-        for (int i = 0; i < s.length(); i++)
-        {
-            Set<Character> longestSubString = new HashSet<Character>();
-            for (int j = i; j < s.length(); j++)
-            {
-                char c = s.charAt(j);
-                if (longestSubString.contains(c))
-                {
-                    break;
-                }
-                longestSubString.add(c);
-            }
-            if (maxLengthSoFar < longestSubString.size())
-            {
-                maxLengthSoFar = longestSubString.size();
-            }
-        }
-        return maxLengthSoFar;
+public class LengthOfLongestSubstring {
+
+  public int lengthOfLongestSubstring(String s) {
+    if (s == null) {
+      return 0;
     }
+    int maxLengthSoFar = 0;
+    for (int i = 0; i < s.length(); i++) {
+      Set<Character> longestSubString = new HashSet<Character>();
+      for (int j = i; j < s.length(); j++) {
+        char c = s.charAt(j);
+        if (longestSubString.contains(c)) {
+          break;
+        }
+        longestSubString.add(c);
+      }
+      if (maxLengthSoFar < longestSubString.size()) {
+        maxLengthSoFar = longestSubString.size();
+      }
+    }
+    return maxLengthSoFar;
+  }
 
 }
 

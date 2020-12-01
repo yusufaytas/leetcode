@@ -28,33 +28,27 @@ Explanation: There is no cycle in the linked list.
 
 
  */
-public class LinkedListCycle
-{
-    public boolean hasCycle(final ListNode head)
-    {
-        ListNode slow = head, fast = head;
-        if (fast == null)
-        {
-            return false;
-        }
-        do
-        {
-            fast = fast.next;
-            if(fast == slow)
-            {
-                return true;
-            }
-            if(fast == null)
-            {
-                return false;
-            }
-            fast = fast.next;
-            if(fast == slow)
-            {
-                return true;
-            }
-            slow = slow.next;
-        } while (fast != null);
-        return false;
+public class LinkedListCycle {
+
+  public boolean hasCycle(final ListNode head) {
+    ListNode slow = head, fast = head;
+    if (fast == null) {
+      return false;
     }
+    do {
+      fast = fast.next;
+      if (fast == slow) {
+        return true;
+      }
+      if (fast == null) {
+        return false;
+      }
+      fast = fast.next;
+      if (fast == slow) {
+        return true;
+      }
+      slow = slow.next;
+    } while (fast != null);
+    return false;
+  }
 }

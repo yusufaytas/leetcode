@@ -17,31 +17,26 @@ the remaining two with no more than 3 citations each, his h-index is 3.
 
 Note: If there are several possible values for h, the maximum one is taken as the h-index.
  */
-public class HIndex
-{
-    public int hIndex(int[] citations)
-    {
-        if (citations.length == 0)
-        {
-            return 0;
-        }
-        Arrays.sort(citations);
-        int currentHIndex = 0;
-        for (int i = 0; i < citations.length; i++)
-        {
-            final int value = citations[i], length = citations.length - i;
-            if (value >= length)
-            {
-                currentHIndex = length;
-                break;
-            }
-        }
-        return currentHIndex;
-    }
+public class HIndex {
 
-    public static void main(String[] args)
-    {
-        int citations[] = {3, 0, 6, 1, 5};
-        System.out.println(new HIndex().hIndex(citations));
+  public static void main(String[] args) {
+    int citations[] = {3, 0, 6, 1, 5};
+    System.out.println(new HIndex().hIndex(citations));
+  }
+
+  public int hIndex(int[] citations) {
+    if (citations.length == 0) {
+      return 0;
     }
+    Arrays.sort(citations);
+    int currentHIndex = 0;
+    for (int i = 0; i < citations.length; i++) {
+      final int value = citations[i], length = citations.length - i;
+      if (value >= length) {
+        currentHIndex = length;
+        break;
+      }
+    }
+    return currentHIndex;
+  }
 }

@@ -21,18 +21,16 @@ Output:
 9   6 3   1
 
  */
-public class InvertBinaryTree
-{
-    public TreeNode invertTree(final TreeNode root)
-    {
-        if (root != null)
-        {
-            final TreeNode temp = root.left;
-            root.left = root.right;
-            root.right = temp;
-            invertTree(root.left);
-            invertTree(root.right);
-        }
-        return root;
+public class InvertBinaryTree {
+
+  public TreeNode invertTree(final TreeNode root) {
+    if (root != null) {
+      final TreeNode temp = root.left;
+      root.left = root.right;
+      root.right = temp;
+      invertTree(root.left);
+      invertTree(root.right);
     }
+    return root;
+  }
 }

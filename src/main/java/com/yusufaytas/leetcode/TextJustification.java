@@ -25,76 +25,62 @@ Return the formatted lines as:
 ]
 Note: Each word is guaranteed not to exceed L in length.
  */
-public class TextJustification
-{
-    public List<String> fullJustify(String[] words, int maxWidth)
-    {
-        List<String> lines = new ArrayList<String>();
-        int index = 0;
-        while (index < words.length)
-        {
-            int currentIndex = index, sumLength = 0;
-            while (currentIndex < words.length
-                    && ((sumLength == 0 ? 0 : 1) + sumLength + words[currentIndex].length()) <= maxWidth)
-            {
-                sumLength += (sumLength == 0 ? 0 : 1) + words[currentIndex].length();
-                currentIndex++;
-            }
-            if (currentIndex >= words.length || ((sumLength == 0 ? 0 : 1) + sumLength + words[currentIndex].length()) > maxWidth)
-            {
-                currentIndex--;
-            }
-            int noOfWords = currentIndex - index + 1;
-            int spaces = maxWidth - sumLength + noOfWords - 1, remainingSpaces = noOfWords == 1 ? spaces : (spaces - (spaces / (noOfWords - 1) * (noOfWords - 1)));
-            String line = "";
-            if (currentIndex == words.length - 1)
-            {
-                for (int i = index; i <= currentIndex; i++)
-                {
-                    if (line.length() != 0)
-                    {
-                        line += " ";
-                    }
-                    line += words[i];
-                }
-                int currentLength = line.length();
-                for (int j = 0; j < maxWidth - currentLength; j++)
-                {
-                    line += " ";
-                }
-            }
-            else
-            {
-                for (int i = index; i <= currentIndex; i++)
-                {
-                    if (line.length() != 0)
-                    {
-                        int currentSpaces = (spaces / (noOfWords - 1)) + (remainingSpaces-- > 0 ? 1 : 0);
-                        for (int j = 0; j < currentSpaces; j++)
-                        {
-                            line += " ";
-                        }
-                    }
-                    line += words[i];
-                }
-                if (noOfWords == 1)
-                {
-                    for (int j = 0; j < spaces; j++)
-                    {
-                        line += " ";
-                    }
-                }
-            }
-            lines.add(line);
-            index = currentIndex + 1;
-        }
-        return lines;
-    }
+public class TextJustification {
 
-    public static void main(String[] args)
-    {
-        int maxWidth = 2;
-        String[] words = {""};
-        System.out.println(new TextJustification().fullJustify(words, maxWidth));
+  public static void main(String[] args) {
+    int maxWidth = 2;
+    String[] words = {""};
+    System.out.println(new TextJustification().fullJustify(words, maxWidth));
+  }
+
+  public List<String> fullJustify(String[] words, int maxWidth) {
+    List<String> lines = new ArrayList<String>();
+    int index = 0;
+    while (index < words.length) {
+      int currentIndex = index, sumLength = 0;
+      while (currentIndex < words.length
+          && ((sumLength == 0 ? 0 : 1) + sumLength + words[currentIndex].length()) <= maxWidth) {
+        sumLength += (sumLength == 0 ? 0 : 1) + words[currentIndex].length();
+        currentIndex++;
+      }
+      if (currentIndex >= words.length
+          || ((sumLength == 0 ? 0 : 1) + sumLength + words[currentIndex].length()) > maxWidth) {
+        currentIndex--;
+      }
+      int noOfWords = currentIndex - index + 1;
+      int spaces = maxWidth - sumLength + noOfWords - 1, remainingSpaces =
+          noOfWords == 1 ? spaces : (spaces - (spaces / (noOfWords - 1) * (noOfWords - 1)));
+      String line = "";
+      if (currentIndex == words.length - 1) {
+        for (int i = index; i <= currentIndex; i++) {
+          if (line.length() != 0) {
+            line += " ";
+          }
+          line += words[i];
+        }
+        int currentLength = line.length();
+        for (int j = 0; j < maxWidth - currentLength; j++) {
+          line += " ";
+        }
+      } else {
+        for (int i = index; i <= currentIndex; i++) {
+          if (line.length() != 0) {
+            int currentSpaces = (spaces / (noOfWords - 1)) + (remainingSpaces-- > 0 ? 1 : 0);
+            for (int j = 0; j < currentSpaces; j++) {
+              line += " ";
+            }
+          }
+          line += words[i];
+        }
+        if (noOfWords == 1) {
+          for (int j = 0; j < spaces; j++) {
+            line += " ";
+          }
+        }
+      }
+      lines.add(line);
+      index = currentIndex + 1;
     }
+    return lines;
+  }
 }

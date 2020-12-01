@@ -27,35 +27,30 @@ Output:
   []
 ]
  */
-public class Subsets
-{
-    public List<List<Integer>> subsets(final int[] nums)
-    {
-        final Set<Set<Integer>> allSubsets = new HashSet<>();
-        final List<Integer> numList = IntStream.of(nums).boxed()
-                .collect(Collectors.toCollection(LinkedList::new));
-        subsets(allSubsets, numList);
-        return allSubsets.stream().map(set -> set.stream().collect(Collectors.toList()))
-                .collect(Collectors.toList());
-    }
+public class Subsets {
 
-    public void subsets(final Set<Set<Integer>> allSubsets, final List<Integer> numList)
-    {
-        if (!allSubsets.add(new HashSet<>(numList)))
-        {
-            return;
-        }
-        for (int i = 0; i < numList.size(); i++)
-        {
-            final int removal = numList.remove(0);
-            subsets(allSubsets, numList);
-            numList.add(removal);
-        }
-    }
+  public static void main(String[] args) {
+    final int[] nums = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 10, 0};
+    System.out.println(new Subsets().subsets(nums));
+  }
 
-    public static void main(String[] args)
-    {
-        final int[] nums = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 10, 0};
-        System.out.println(new Subsets().subsets(nums));
+  public List<List<Integer>> subsets(final int[] nums) {
+    final Set<Set<Integer>> allSubsets = new HashSet<>();
+    final List<Integer> numList = IntStream.of(nums).boxed()
+        .collect(Collectors.toCollection(LinkedList::new));
+    subsets(allSubsets, numList);
+    return allSubsets.stream().map(set -> set.stream().collect(Collectors.toList()))
+        .collect(Collectors.toList());
+  }
+
+  public void subsets(final Set<Set<Integer>> allSubsets, final List<Integer> numList) {
+    if (!allSubsets.add(new HashSet<>(numList))) {
+      return;
     }
+    for (int i = 0; i < numList.size(); i++) {
+      final int removal = numList.remove(0);
+      subsets(allSubsets, numList);
+      numList.add(removal);
+    }
+  }
 }

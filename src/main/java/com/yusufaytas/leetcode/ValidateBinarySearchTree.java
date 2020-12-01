@@ -33,36 +33,30 @@ Input: [5,1,4,null,null,3,6]
 Output: false
 Explanation: The root node's value is 5 but its right child's value is 4.
  */
-public class ValidateBinarySearchTree
-{
-    public boolean isValidBST(final TreeNode root)
-    {
-        final List<Integer> values = new ArrayList<>();
-        inOrderTraversal(root, values);
-        for (int i = 1; i < values.size(); i++)
-        {
-            if(values.get(i-1) >=    values.get(i))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
+public class ValidateBinarySearchTree {
 
-    public void inOrderTraversal(final TreeNode root, final List<Integer> nodes)
-    {
-        if(root != null)
-        {
-            inOrderTraversal(root.left, nodes);
-            nodes.add(root.val);
-            inOrderTraversal(root.right, nodes) ;
-        }
-    }
+  public static void main(final String[] args) {
+    final TreeNode root = new TreeNode(1);
+    root.left = new TreeNode(1);
+    System.out.println(new ValidateBinarySearchTree().isValidBST(root));
+  }
 
-    public static void main(final String[] args)
-    {
-        final TreeNode root = new TreeNode(1);
-        root.left = new TreeNode(1);
-        System.out.println(new ValidateBinarySearchTree().isValidBST(root));
+  public boolean isValidBST(final TreeNode root) {
+    final List<Integer> values = new ArrayList<>();
+    inOrderTraversal(root, values);
+    for (int i = 1; i < values.size(); i++) {
+      if (values.get(i - 1) >= values.get(i)) {
+        return false;
+      }
     }
+    return true;
+  }
+
+  public void inOrderTraversal(final TreeNode root, final List<Integer> nodes) {
+    if (root != null) {
+      inOrderTraversal(root.left, nodes);
+      nodes.add(root.val);
+      inOrderTraversal(root.right, nodes);
+    }
+  }
 }

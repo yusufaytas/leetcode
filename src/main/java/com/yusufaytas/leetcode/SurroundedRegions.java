@@ -29,73 +29,58 @@ on the border will be flipped to 'X'. Two cells are connected if they are adjace
 connected horizontally or vertically.
 
  */
-public class SurroundedRegions
-{
-    public void solve(char[][] board)
-    {
-        if (board == null || board.length == 0)
-        {
-            return;
-        }
-        for (int i = 1; i < board.length - 1; i++)
-        {
-            for (int j = 1; j < board[i].length - 1; j++)
-            {
-                if (board[i][j] == 'O')
-                {
-                    if (isSurrounded(board, i, j))
-                    {
-                        updateSurrounded(board, i, j, 'X');
-                    }
-                    else
-                    {
-                        updateSurrounded(board, i, j, 'O');
-                    }
-                }
-            }
-        }
-    }
+public class SurroundedRegions {
 
-    boolean isSurrounded(final char[][] board, final int i, final int j)
-    {
-        if (i < 0 || i == board.length || j < 0 || j == board[0].length)
-        {
-            return false;
-        }
-        if (board[i][j] == 'V' || board[i][j] == 'X')
-        {
-            return true;
-        }
-        board[i][j] = 'V';
-        return isSurrounded(board, i - 1, j) && isSurrounded(board, i + 1, j)
-                && isSurrounded(board, i, j - 1) && isSurrounded(board, i, j + 1);
-    }
+  public static void main(String[] args) {
+    final char[][] board = new char[][]{
+        {'X', 'X', 'X', 'X'},
+        {'X', 'O', 'O', 'X'},
+        {'X', 'X', 'O', 'X'},
+        {'X', 'O', 'X', 'X'},
+    };
+    new SurroundedRegions().solve(board);
+    printMatrix(board);
+  }
 
-    void updateSurrounded(final char[][] board, final int i, final int j, final char update)
-    {
-        if (i < 0 || i == board.length || j < 0 || j == board[0].length)
-        {
-            return;
-        }
-        if (board[i][j] == 'V')
-        {
-            board[i][j] = update;
-            updateSurrounded(board, i - 1, j, update);
-            updateSurrounded(board, i + 1, j, update);
-            updateSurrounded(board, i, j - 1, update);
-            updateSurrounded(board, i, j + 1, update);
-        }
+  public void solve(char[][] board) {
+    if (board == null || board.length == 0) {
+      return;
     }
+    for (int i = 1; i < board.length - 1; i++) {
+      for (int j = 1; j < board[i].length - 1; j++) {
+        if (board[i][j] == 'O') {
+          if (isSurrounded(board, i, j)) {
+            updateSurrounded(board, i, j, 'X');
+          } else {
+            updateSurrounded(board, i, j, 'O');
+          }
+        }
+      }
+    }
+  }
 
-    public static void main(String[] args)
-    {
-        final char[][] board = new char[][]{
-                {'X', 'X', 'X', 'X'},
-                {'X', 'O', 'O', 'X'},
-                {'X', 'X', 'O', 'X'},
-                {'X', 'O', 'X', 'X'},
-        };
-        new SurroundedRegions().solve(board);
-        printMatrix(board);
+  boolean isSurrounded(final char[][] board, final int i, final int j) {
+    if (i < 0 || i == board.length || j < 0 || j == board[0].length) {
+      return false;
     }
+    if (board[i][j] == 'V' || board[i][j] == 'X') {
+      return true;
+    }
+    board[i][j] = 'V';
+    return isSurrounded(board, i - 1, j) && isSurrounded(board, i + 1, j)
+        && isSurrounded(board, i, j - 1) && isSurrounded(board, i, j + 1);
+  }
+
+  void updateSurrounded(final char[][] board, final int i, final int j, final char update) {
+    if (i < 0 || i == board.length || j < 0 || j == board[0].length) {
+      return;
+    }
+    if (board[i][j] == 'V') {
+      board[i][j] = update;
+      updateSurrounded(board, i - 1, j, update);
+      updateSurrounded(board, i + 1, j, update);
+      updateSurrounded(board, i, j - 1, update);
+      updateSurrounded(board, i, j + 1, update);
+    }
+  }
 }

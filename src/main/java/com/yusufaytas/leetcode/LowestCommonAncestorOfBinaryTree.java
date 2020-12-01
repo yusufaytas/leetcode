@@ -34,57 +34,49 @@ Note:
 
 
  */
-public class LowestCommonAncestorOfBinaryTree
-{
-    public TreeNode lowestCommonAncestor(final TreeNode root, final TreeNode p, final TreeNode q)
-    {
-        final Queue<TreeNode> pathForP = new ArrayDeque<>();
-        final Queue<TreeNode> pathForQ = new ArrayDeque<>();
-        if (findNode(pathForP, root, p) && findNode(pathForQ, root, q))
-        {
-            while (!pathForP.isEmpty())
-            {
-                final TreeNode nodeForP = pathForP.poll();
-                for (TreeNode nodeForQ : pathForQ)
-                {
-                    if(nodeForP == nodeForQ)
-                    {
-                        return nodeForP;
-                    }
-                }
-            }
-        }
+public class LowestCommonAncestorOfBinaryTree {
 
-        return root;
+  public static void main(String[] args) {
+    final TreeNode root = new TreeNode(3);
+    root.left = new TreeNode(5);
+    root.left.left = new TreeNode(6);
+    root.left.right = new TreeNode(2);
+    root.left.right.left = new TreeNode(7);
+    root.left.right.right = new TreeNode(4);
+    System.out.println(new LowestCommonAncestorOfBinaryTree()
+        .lowestCommonAncestor(root, root.left, root.left.right.right));
+  }
+
+  public TreeNode lowestCommonAncestor(final TreeNode root, final TreeNode p, final TreeNode q) {
+    final Queue<TreeNode> pathForP = new ArrayDeque<>();
+    final Queue<TreeNode> pathForQ = new ArrayDeque<>();
+    if (findNode(pathForP, root, p) && findNode(pathForQ, root, q)) {
+      while (!pathForP.isEmpty()) {
+        final TreeNode nodeForP = pathForP.poll();
+        for (TreeNode nodeForQ : pathForQ) {
+          if (nodeForP == nodeForQ) {
+            return nodeForP;
+          }
+        }
+      }
     }
 
-    private boolean findNode(final Queue<TreeNode> path, final TreeNode root, final TreeNode nodeToFind)
-    {
-        if (root == null)
-        {
-            return false;
-        }
-        if (root == nodeToFind)
-        {
-            path.add(root);
-            return true;
-        }
-        if (findNode(path, root.left, nodeToFind) || findNode(path, root.right, nodeToFind))
-        {
-            path.add(root);
-            return true;
-        }
-        return false;
-    }
+    return root;
+  }
 
-    public static void main(String[] args)
-    {
-        final TreeNode root = new TreeNode(3);
-        root.left = new TreeNode(5);
-        root.left.left = new TreeNode(6);
-        root.left.right = new TreeNode(2);
-        root.left.right.left = new TreeNode(7);
-        root.left.right.right = new TreeNode(4);
-        System.out.println(new LowestCommonAncestorOfBinaryTree().lowestCommonAncestor(root, root.left, root.left.right.right ));
+  private boolean findNode(final Queue<TreeNode> path, final TreeNode root,
+      final TreeNode nodeToFind) {
+    if (root == null) {
+      return false;
     }
+    if (root == nodeToFind) {
+      path.add(root);
+      return true;
+    }
+    if (findNode(path, root.left, nodeToFind) || findNode(path, root.right, nodeToFind)) {
+      path.add(root);
+      return true;
+    }
+    return false;
+  }
 }

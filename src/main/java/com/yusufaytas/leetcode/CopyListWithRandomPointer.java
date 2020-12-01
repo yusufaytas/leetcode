@@ -17,39 +17,35 @@ Each node is represented as a pair of [val, random_index] where:
     where random pointer points to, or null if it does not point to any node.
 
  */
-public class CopyListWithRandomPointer
-{
-    public Node copyRandomList(final Node head)
-    {
-        if (head == null)
-        {
-            return null;
-        }
-        final Map<Node, Integer> nodeToIndex = new HashMap<>();
-        final Map<Integer, Node> indexToNode = new HashMap<>();
-        final Node newHead = new Node(head.val);
-        Node temp = head.next, newTemp = newHead;
-        int index = 0;
-        indexToNode.put(index, newHead);
-        nodeToIndex.put(head, index++);
-        while (temp != null)
-        {
-            final Node newNode = new Node(temp.val);
-            newTemp.next = newNode;
-            indexToNode.put(index, newNode);
-            nodeToIndex.put(temp, index++);
-            temp = temp.next;
-            newTemp = newTemp.next;
-        }
-        temp = head;
-        newTemp = newHead;
-        while (temp != null)
-        {
-            final Node random = indexToNode.get(nodeToIndex.get(temp.random));
-            newTemp.random = random;
-            temp = temp.next;
-            newTemp = newTemp.next;
-        }
-        return newHead;
+public class CopyListWithRandomPointer {
+
+  public Node copyRandomList(final Node head) {
+    if (head == null) {
+      return null;
     }
+    final Map<Node, Integer> nodeToIndex = new HashMap<>();
+    final Map<Integer, Node> indexToNode = new HashMap<>();
+    final Node newHead = new Node(head.val);
+    Node temp = head.next, newTemp = newHead;
+    int index = 0;
+    indexToNode.put(index, newHead);
+    nodeToIndex.put(head, index++);
+    while (temp != null) {
+      final Node newNode = new Node(temp.val);
+      newTemp.next = newNode;
+      indexToNode.put(index, newNode);
+      nodeToIndex.put(temp, index++);
+      temp = temp.next;
+      newTemp = newTemp.next;
+    }
+    temp = head;
+    newTemp = newHead;
+    while (temp != null) {
+      final Node random = indexToNode.get(nodeToIndex.get(temp.random));
+      newTemp.random = random;
+      temp = temp.next;
+      newTemp = newTemp.next;
+    }
+    return newHead;
+  }
 }

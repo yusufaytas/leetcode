@@ -16,53 +16,42 @@ Output: 3
 Explanation: transactions = [buy, sell, cooldown, buy, sell]
 
  */
-public class BestTimeBuySellStockCooldown
-{
-    public int maxProfit(final int[] prices)
-    {
-        if (prices == null || prices.length == 0)
-        {
-            return 0;
-        }
-        final int[][] profits = new int[prices.length][3];
-        return maxProfit(prices, profits, 0, 0);
-    }
+public class BestTimeBuySellStockCooldown {
 
-    //state=0 noStock, state=1 => hasStock, state=2 => cooldown
-    public int maxProfit(final int[] prices, final int[][] profits,
-                         final int start, final int state)
-    {
-        if (start == prices.length)
-        {
-            return 0;
-        }
-        if (profits[start][state] != 0)
-        {
-            return profits[start][state];
-        }
-        int buyProfit = Integer.MIN_VALUE, sellProfit = Integer.MIN_VALUE, coolDown = Integer.MIN_VALUE;
-        if (state == 0)
-        {
-            buyProfit = Math.max(maxProfit(prices, profits, start + 1, 1) - prices[start],
-                    maxProfit(prices, profits, start + 1, 0));
+  public static void main(String[] args) {
+    int[] prices = {1, 2, 3, 0, 2};
+    System.out.println(new BestTimeBuySellStockCooldown().maxProfit(prices));
+  }
 
-        }
-        else if (state == 1)
-        {
-            sellProfit = Math.max(maxProfit(prices, profits, start + 1, 2) + prices[start],
-                    maxProfit(prices, profits, start + 1, 1));
-        }
-        else
-        {
-            coolDown = maxProfit(prices, profits, start + 1, 0);
-        }
-        profits[start][state] = Math.max(buyProfit, Math.max(sellProfit, coolDown));
-        return profits[start][state];
+  public int maxProfit(final int[] prices) {
+    if (prices == null || prices.length == 0) {
+      return 0;
     }
+    final int[][] profits = new int[prices.length][3];
+    return maxProfit(prices, profits, 0, 0);
+  }
 
-    public static void main(String[] args)
-    {
-        int[] prices = {1, 2, 3, 0, 2};
-        System.out.println(new BestTimeBuySellStockCooldown().maxProfit(prices));
+  //state=0 noStock, state=1 => hasStock, state=2 => cooldown
+  public int maxProfit(final int[] prices, final int[][] profits,
+      final int start, final int state) {
+    if (start == prices.length) {
+      return 0;
     }
+    if (profits[start][state] != 0) {
+      return profits[start][state];
+    }
+    int buyProfit = Integer.MIN_VALUE, sellProfit = Integer.MIN_VALUE, coolDown = Integer.MIN_VALUE;
+    if (state == 0) {
+      buyProfit = Math.max(maxProfit(prices, profits, start + 1, 1) - prices[start],
+          maxProfit(prices, profits, start + 1, 0));
+
+    } else if (state == 1) {
+      sellProfit = Math.max(maxProfit(prices, profits, start + 1, 2) + prices[start],
+          maxProfit(prices, profits, start + 1, 1));
+    } else {
+      coolDown = maxProfit(prices, profits, start + 1, 0);
+    }
+    profits[start][state] = Math.max(buyProfit, Math.max(sellProfit, coolDown));
+    return profits[start][state];
+  }
 }

@@ -39,49 +39,39 @@ Input: A = "", B = "aa"
 Output: false
 
  */
-public class BuddyStrings
-{
-    public boolean buddyStrings(final String A, final String B)
-    {
-        if (A == null || B == null || A.length() != B.length() || A.length() < 2)
-        {
-            return false;
-        }
-        int firstIndex = -1, secondIndex = -1;
-        int count =0;
-        final Set<Character> chars = new HashSet<>();
-        for (int i = 0; i < A.length(); i++)
-        {
-            chars.add(A.charAt(i));
-            if (A.charAt(i) != B.charAt(i))
-            {
-                if (firstIndex >= 0)
-                {
-                    secondIndex = i;
-                }
-                else
-                {
-                    firstIndex = i;
-                }
-                count++;
-            }
-        }
-        if (firstIndex >= 0)
-        {
-            if (secondIndex > 0 && count == 2)
-            {
-                return A.charAt(firstIndex) == B.charAt(secondIndex)
-                        && A.charAt(secondIndex) == B.charAt(firstIndex);
-            }
-            return false;
-        }
-        return chars.size() < A.length();
-    }
+public class BuddyStrings {
 
-    public static void main(String[] args)
-    {
-        final String A = "abab";
-        final String B = "baba";
-        System.out.println(new BuddyStrings().buddyStrings(A, B));
+  public static void main(String[] args) {
+    final String A = "abab";
+    final String B = "baba";
+    System.out.println(new BuddyStrings().buddyStrings(A, B));
+  }
+
+  public boolean buddyStrings(final String A, final String B) {
+    if (A == null || B == null || A.length() != B.length() || A.length() < 2) {
+      return false;
     }
+    int firstIndex = -1, secondIndex = -1;
+    int count = 0;
+    final Set<Character> chars = new HashSet<>();
+    for (int i = 0; i < A.length(); i++) {
+      chars.add(A.charAt(i));
+      if (A.charAt(i) != B.charAt(i)) {
+        if (firstIndex >= 0) {
+          secondIndex = i;
+        } else {
+          firstIndex = i;
+        }
+        count++;
+      }
+    }
+    if (firstIndex >= 0) {
+      if (secondIndex > 0 && count == 2) {
+        return A.charAt(firstIndex) == B.charAt(secondIndex)
+            && A.charAt(secondIndex) == B.charAt(firstIndex);
+      }
+      return false;
+    }
+    return chars.size() < A.length();
+  }
 }

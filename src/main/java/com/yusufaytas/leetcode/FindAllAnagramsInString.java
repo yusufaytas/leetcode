@@ -38,44 +38,35 @@ The substring with start index = 0 is "ab", which is an anagram of "ab".
 The substring with start index = 1 is "ba", which is an anagram of "ab".
 The substring with start index = 2 is "ab", which is an anagram of "ab".
  */
-public class FindAllAnagramsInString
-{
-    public List<Integer> findAnagrams(final String s, final String p)
-    {
-        if(p.length() > s.length())
-        {
-            return Collections.emptyList();
-        }
-        final Map<Character, Integer> pCounts = new HashMap<>(p.length());
-        final Map<Character, Integer> sCounts = new HashMap<>(p.length());
-        final List<Integer> indexes = new ArrayList<>();
-        for (int i = 0; i < p.length(); i++)
-        {
-            pCounts.put(p.charAt(i), pCounts.getOrDefault(p.charAt(i), 0) + 1);
-            sCounts.put(s.charAt(i), sCounts.getOrDefault(s.charAt(i), 0) + 1);
-        }
-        if (sCounts.equals(pCounts))
-        {
-            indexes.add(0);
-        }
-        for (int i = 0; i < s.length() - p.length(); i++)
-        {
-            final int indexValue = sCounts.get(s.charAt(i));
-            if (indexValue == 1)
-            {
-                sCounts.remove(s.charAt(i));
-            }
-            else
-            {
-                sCounts.put(s.charAt(i), sCounts.get(s.charAt(i)) - 1);
-            }
-            sCounts.put(s.charAt(i + p.length()), sCounts.getOrDefault(s.charAt(i + p.length()), 0) + 1);
-            if (sCounts.equals(pCounts))
-            {
-                indexes.add(i + 1);
-            }
-        }
-        return indexes;
+public class FindAllAnagramsInString {
+
+  public List<Integer> findAnagrams(final String s, final String p) {
+    if (p.length() > s.length()) {
+      return Collections.emptyList();
     }
+    final Map<Character, Integer> pCounts = new HashMap<>(p.length());
+    final Map<Character, Integer> sCounts = new HashMap<>(p.length());
+    final List<Integer> indexes = new ArrayList<>();
+    for (int i = 0; i < p.length(); i++) {
+      pCounts.put(p.charAt(i), pCounts.getOrDefault(p.charAt(i), 0) + 1);
+      sCounts.put(s.charAt(i), sCounts.getOrDefault(s.charAt(i), 0) + 1);
+    }
+    if (sCounts.equals(pCounts)) {
+      indexes.add(0);
+    }
+    for (int i = 0; i < s.length() - p.length(); i++) {
+      final int indexValue = sCounts.get(s.charAt(i));
+      if (indexValue == 1) {
+        sCounts.remove(s.charAt(i));
+      } else {
+        sCounts.put(s.charAt(i), sCounts.get(s.charAt(i)) - 1);
+      }
+      sCounts.put(s.charAt(i + p.length()), sCounts.getOrDefault(s.charAt(i + p.length()), 0) + 1);
+      if (sCounts.equals(pCounts)) {
+        indexes.add(i + 1);
+      }
+    }
+    return indexes;
+  }
 
 }

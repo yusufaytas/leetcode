@@ -1,26 +1,23 @@
 package com.yusufaytas.leetcode;
 
-public class ListNode
-{
-    int val;
-    ListNode next;
+public class ListNode {
 
-    ListNode(int x)
-    {
-        val = x;
-    }
+  int val;
+  ListNode next;
 
-    @Override
-    public String toString()
-    {
-        String values = ""+ val;
-        ListNode current = next;
-        while (current != null)
-        {
-            values += ",";
-            values += current.val;
-            current = current.next;
-        }
-        return values;
+  ListNode(int x) {
+    val = x;
+  }
+
+  @Override
+  public String toString() {
+    String values = "" + val;
+    ListNode current = next;
+    while (current != null) {
+      values += ",";
+      values += current.val;
+      current = current.next;
     }
+    return values;
+  }
 }

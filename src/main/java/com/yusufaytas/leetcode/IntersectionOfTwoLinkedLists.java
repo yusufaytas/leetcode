@@ -20,23 +20,20 @@ Input Explanation: The intersected node's value is 8 (note that this must not be
 From the head of A, it reads as [4,1,8,4,5]. From the head of B, it reads as [5,0,1,8,4,5].
 There are 2 nodes before the intersected node in A; There are 3 nodes before the intersected node in B.
  */
-public class IntersectionOfTwoLinkedLists
-{
-    public ListNode getIntersectionNode(final ListNode headA, final ListNode headB)
-    {
-        final Set<ListNode> nodes = new HashSet<>();
-        ListNode current = headA;
-        while (current != null)
-        {
-            nodes.add(current);
-            current = current.next;
-        }
-        current = headB;
-        while (current != null && !nodes.contains(current))
-        {
-            current = current.next;
-        }
-        return current;
+public class IntersectionOfTwoLinkedLists {
+
+  public ListNode getIntersectionNode(final ListNode headA, final ListNode headB) {
+    final Set<ListNode> nodes = new HashSet<>();
+    ListNode current = headA;
+    while (current != null) {
+      nodes.add(current);
+      current = current.next;
     }
+    current = headB;
+    while (current != null && !nodes.contains(current)) {
+      current = current.next;
+    }
+    return current;
+  }
 
 }

@@ -34,32 +34,28 @@ Explanation: There is no cycle in the linked list.
 Follow-up:
 Can you solve it without using extra space?
  */
-public class LinkedListCycleTwo
-{
-    public ListNode detectCycle(final ListNode head)
-    {
-        final Set<ListNode> seen = new HashSet<>();
-        ListNode current = head;
-        while (current != null)
-        {
-            if (seen.contains(current))
-            {
-                return current;
-            }
-            seen.add(current);
-            current = current.next;
-        }
-        return null;
-    }
+public class LinkedListCycleTwo {
 
-    public static void main(String[] args)
-    {
-        final ListNode head = new ListNode(3);
-        head.next = new ListNode(2);
-        head.next.next = new ListNode(0);
-        head.next.next.next = new ListNode(-4);
-        head.next.next.next.next = head.next;
-        final ListNode result = new LinkedListCycleTwo().detectCycle(head);
-        System.out.println(result == null ? null : result.val);
+  public static void main(String[] args) {
+    final ListNode head = new ListNode(3);
+    head.next = new ListNode(2);
+    head.next.next = new ListNode(0);
+    head.next.next.next = new ListNode(-4);
+    head.next.next.next.next = head.next;
+    final ListNode result = new LinkedListCycleTwo().detectCycle(head);
+    System.out.println(result == null ? null : result.val);
+  }
+
+  public ListNode detectCycle(final ListNode head) {
+    final Set<ListNode> seen = new HashSet<>();
+    ListNode current = head;
+    while (current != null) {
+      if (seen.contains(current)) {
+        return current;
+      }
+      seen.add(current);
+      current = current.next;
     }
+    return null;
+  }
 }

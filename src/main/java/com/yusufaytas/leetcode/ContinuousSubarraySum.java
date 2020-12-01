@@ -17,30 +17,24 @@ Note:
 The length of the array won't exceed 10,000.
 You may assume the sum of all the numbers is in the range of a signed 32-bit integer.
  */
-public class ContinuousSubarraySum
-{
+public class ContinuousSubarraySum {
 
-    public boolean checkSubarraySum(int[] nums, int k)
-    {
-        for (int i = 0; i < nums.length; i++)
-        {
-            int sum = nums[i];
-            for (int j = i + 1; j < nums.length; j++)
-            {
-                sum += nums[j];
-                if (((k == 0 && sum == 0) || (k != 0 && sum % k == 0)))
-                {
-                    return true;
-                }
-            }
+  public static void main(String[] args) {
+    int k = 0;
+    int nums[] = {0, 1, 0};
+    System.out.println(new ContinuousSubarraySum().checkSubarraySum(nums, k));
+  }
+
+  public boolean checkSubarraySum(int[] nums, int k) {
+    for (int i = 0; i < nums.length; i++) {
+      int sum = nums[i];
+      for (int j = i + 1; j < nums.length; j++) {
+        sum += nums[j];
+        if (((k == 0 && sum == 0) || (k != 0 && sum % k == 0))) {
+          return true;
         }
-        return false;
+      }
     }
-
-    public static void main(String[] args)
-    {
-        int k = 0;
-        int nums[] = {0, 1, 0};
-        System.out.println(new ContinuousSubarraySum().checkSubarraySum(nums, k));
-    }
+    return false;
+  }
 }

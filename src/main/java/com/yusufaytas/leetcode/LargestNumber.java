@@ -29,27 +29,23 @@ Input: nums = [10]
 Output: "10"
 
  */
-public class LargestNumber
-{
-    public String largestNumber(final int[] nums)
-    {
-        if (nums == null || nums.length == 0)
-        {
-            return "";
-        }
-        final String number = Arrays.stream(nums).mapToObj(i -> Integer.toString(i))
-                .sorted((o1, o2) -> (o2 + o1).compareTo(o1 + o2))
-                .collect(Collectors.joining(""));
-        if(number.startsWith("0"))
-        {
-            return "0";
-        }
-        return number;
-    }
+public class LargestNumber {
 
-    public static void main(String[] args)
-    {
-        final int[] nums = new int[]{0, 0};
-        System.out.println(new LargestNumber().largestNumber(nums));
+  public static void main(String[] args) {
+    final int[] nums = new int[]{0, 0};
+    System.out.println(new LargestNumber().largestNumber(nums));
+  }
+
+  public String largestNumber(final int[] nums) {
+    if (nums == null || nums.length == 0) {
+      return "";
     }
+    final String number = Arrays.stream(nums).mapToObj(i -> Integer.toString(i))
+        .sorted((o1, o2) -> (o2 + o1).compareTo(o1 + o2))
+        .collect(Collectors.joining(""));
+    if (number.startsWith("0")) {
+      return "0";
+    }
+    return number;
+  }
 }

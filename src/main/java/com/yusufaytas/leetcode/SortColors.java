@@ -24,38 +24,31 @@ Follow up:
     Could you come up with a one-pass algorithm using only constant space?
 
  */
-public class SortColors
-{
-    public void sortColors(int[] nums)
-    {
-        int whiteIndex = 0, blueIndex = 0;
-        for (int i = 0; i < nums.length; i++)
-        {
-            int current = nums[i];
-            if (current == 0 && i >= blueIndex)
-            {
-                nums[i] = 2;
-                nums[blueIndex++] = 1;
-                nums[whiteIndex++] = 0;
-            }
-            else if (current == 0 && i >= whiteIndex)
-            {
-                nums[whiteIndex++] = 0;
-                nums[i] = 1;
-            }
-            else if (current == 1 && i >= blueIndex)
-            {
-                nums[i] = 2;
-                nums[blueIndex++] = 1;
-            }
-        }
-    }
+public class SortColors {
 
-    public static void main(String[] args)
-    {
-        final int[] nums = {1};
-        new SortColors().sortColors(nums);
-        System.out.println(Arrays.stream(nums).mapToObj(i -> Integer.toString(i)).collect(Collectors.joining(",")));
+  public static void main(String[] args) {
+    final int[] nums = {1};
+    new SortColors().sortColors(nums);
+    System.out.println(
+        Arrays.stream(nums).mapToObj(i -> Integer.toString(i)).collect(Collectors.joining(",")));
+  }
+
+  public void sortColors(int[] nums) {
+    int whiteIndex = 0, blueIndex = 0;
+    for (int i = 0; i < nums.length; i++) {
+      int current = nums[i];
+      if (current == 0 && i >= blueIndex) {
+        nums[i] = 2;
+        nums[blueIndex++] = 1;
+        nums[whiteIndex++] = 0;
+      } else if (current == 0 && i >= whiteIndex) {
+        nums[whiteIndex++] = 0;
+        nums[i] = 1;
+      } else if (current == 1 && i >= blueIndex) {
+        nums[i] = 2;
+        nums[blueIndex++] = 1;
+      }
     }
+  }
 
 }

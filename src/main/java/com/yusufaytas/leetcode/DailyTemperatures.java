@@ -11,22 +11,18 @@ your output should be [1, 1, 4, 2, 1, 1, 0, 0].
 Note: The length of temperatures will be in the range [1, 30000].
 Each temperature will be an integer in the range [30, 100].
  */
-    public class DailyTemperatures
-{
-    public int[] dailyTemperatures(final int[] temperatures)
-    {
-        final int[] daysToWarmerDays = new int[temperatures.length];
-        for (int i = 0; i < temperatures.length; i++)
-        {
-            for (int j = i + 1; j < temperatures.length; j++)
-            {
-                if (temperatures[j] > temperatures[i])
-                {
-                    daysToWarmerDays[i] = j - i;
-                    break;
-                }
-            }
+public class DailyTemperatures {
+
+  public int[] dailyTemperatures(final int[] temperatures) {
+    final int[] daysToWarmerDays = new int[temperatures.length];
+    for (int i = 0; i < temperatures.length; i++) {
+      for (int j = i + 1; j < temperatures.length; j++) {
+        if (temperatures[j] > temperatures[i]) {
+          daysToWarmerDays[i] = j - i;
+          break;
         }
-        return daysToWarmerDays;
+      }
     }
+    return daysToWarmerDays;
+  }
 }

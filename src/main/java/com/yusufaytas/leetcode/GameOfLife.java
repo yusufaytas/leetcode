@@ -1,11 +1,10 @@
 package com.yusufaytas.leetcode;
 
+import static com.yusufaytas.leetcode.Utils.printMatrix;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-
-import static com.yusufaytas.leetcode.Utils.printMatrix;
 
 /*
 According to the Wikipedia's article: "The Game of Life, also known simply as Life,
@@ -48,62 +47,50 @@ Follow up:
 
 
  */
-public class GameOfLife
-{
-    public void gameOfLife(final int[][] board)
-    {
-        if (board == null || board.length == 0)
-        {
-            return;
-        }
-        final List<List<Integer>> updates = new ArrayList<>();
-        for (int i = 0; i < board.length; i++)
-        {
-            for (int j = 0; j < board[0].length; j++)
-            {
-                int alive = 0;
-                for (int k = 0; k < 3; k++)
-                {
-                    for (int l = 0; l < 3; l++)
-                    {
-                        if (i - 1 + k >= 0 && i - 1 + k < board.length && j - 1 + l >= 0 && j - 1 + l < board[0].length)
-                        {
-                            if (k == 1 && l == 1)
-                            {
-                                continue;
-                            }
-                            if (board[i - 1 + k][j - 1 + l] == 1)
-                            {
-                                alive++;
-                            }
-                        }
-                    }
-                }
-                if (board[i][j] == 1 && (alive < 2 || alive > 3))
-                {
-                    updates.add(Arrays.asList(i, j, 0));
-                }
-                if (board[i][j] == 0 && alive == 3)
-                {
-                    updates.add(Arrays.asList(i, j, 1));
-                }
-            }
-        }
-        for (int i = 0; i < updates.size(); i++)
-        {
-            board[updates.get(i).get(0)][updates.get(i).get(1)] = updates.get(i).get(2);
-        }
-    }
+public class GameOfLife {
 
-    public static void main(String[] args)
-    {
-        final int[][] board = new int[][]{
-                {0, 1, 0},
-                {0, 0, 1},
-                {1, 1, 1},
-                {0, 0, 0}
-        };
-        new GameOfLife().gameOfLife(board);
-        printMatrix(board);
+  public static void main(String[] args) {
+    final int[][] board = new int[][]{
+        {0, 1, 0},
+        {0, 0, 1},
+        {1, 1, 1},
+        {0, 0, 0}
+    };
+    new GameOfLife().gameOfLife(board);
+    printMatrix(board);
+  }
+
+  public void gameOfLife(final int[][] board) {
+    if (board == null || board.length == 0) {
+      return;
     }
+    final List<List<Integer>> updates = new ArrayList<>();
+    for (int i = 0; i < board.length; i++) {
+      for (int j = 0; j < board[0].length; j++) {
+        int alive = 0;
+        for (int k = 0; k < 3; k++) {
+          for (int l = 0; l < 3; l++) {
+            if (i - 1 + k >= 0 && i - 1 + k < board.length && j - 1 + l >= 0
+                && j - 1 + l < board[0].length) {
+              if (k == 1 && l == 1) {
+                continue;
+              }
+              if (board[i - 1 + k][j - 1 + l] == 1) {
+                alive++;
+              }
+            }
+          }
+        }
+        if (board[i][j] == 1 && (alive < 2 || alive > 3)) {
+          updates.add(Arrays.asList(i, j, 0));
+        }
+        if (board[i][j] == 0 && alive == 3) {
+          updates.add(Arrays.asList(i, j, 1));
+        }
+      }
+    }
+    for (int i = 0; i < updates.size(); i++) {
+      board[updates.get(i).get(0)][updates.get(i).get(1)] = updates.get(i).get(2);
+    }
+  }
 }

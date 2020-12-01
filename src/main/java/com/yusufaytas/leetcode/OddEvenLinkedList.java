@@ -17,39 +17,33 @@ Input: 2->1->3->5->6->4->7->NULL
 Output: 2->3->6->7->1->5->4->NULL
 
  */
-    public class OddEvenLinkedList
-{
-    public ListNode oddEvenList(final ListNode head)
-    {
-        int index = 3;
-        ListNode odd = head, even = odd != null && odd.next != null ? odd.next : null,
-                evenHead = even, temp = even != null ? even.next : null;
-        while (temp != null)
-        {
-            if (index++ % 2 == 0)
-            {
-                even.next = temp;
-                even = even.next;
-            }
-            else
-            {
-                odd.next = temp;
-                odd = odd.next;
-            }
-            temp = temp.next;
-        }
-        even.next = null;
-        odd.next = evenHead;
-        return head;
-    }
+public class OddEvenLinkedList {
 
-    public static void main(String[] args)
-    {
-        ListNode listNode = new ListNode(1);
-        listNode.next = new ListNode(2);
-        listNode.next.next = new ListNode(3);
-        listNode.next.next.next = new ListNode(4);
-        listNode.next.next.next.next = new ListNode(5);
-        System.out.println(new OddEvenLinkedList().oddEvenList(listNode));
+  public static void main(String[] args) {
+    ListNode listNode = new ListNode(1);
+    listNode.next = new ListNode(2);
+    listNode.next.next = new ListNode(3);
+    listNode.next.next.next = new ListNode(4);
+    listNode.next.next.next.next = new ListNode(5);
+    System.out.println(new OddEvenLinkedList().oddEvenList(listNode));
+  }
+
+  public ListNode oddEvenList(final ListNode head) {
+    int index = 3;
+    ListNode odd = head, even = odd != null && odd.next != null ? odd.next : null,
+        evenHead = even, temp = even != null ? even.next : null;
+    while (temp != null) {
+      if (index++ % 2 == 0) {
+        even.next = temp;
+        even = even.next;
+      } else {
+        odd.next = temp;
+        odd = odd.next;
+      }
+      temp = temp.next;
     }
+    even.next = null;
+    odd.next = evenHead;
+    return head;
+  }
 }

@@ -22,38 +22,31 @@ Output: false
 
 Explanation: The array cannot be partitioned into equal sum subsets.
  */
-public class PartitionEqualSubsetSum
-{
-    public boolean canPartition(final int[] nums)
-    {
-        final int sum = Arrays.stream(nums).sum();
-        if (sum % 2 == 1 || nums.length < 2)
-        {
-            return false;
-        }
-        final int halfSum = sum / 2;
-        final boolean[][] sums = new boolean[nums.length + 1][halfSum + 1];
-        for (int i = 0; i <= nums.length; i++)
-        {
-            sums[i][0] = true;
-        }
-        for (int i = 1; i <= nums.length; i++)
-        {
-            for (int j = 1; j <= halfSum; j++)
-            {
-                if (j - nums[i - 1] >= 0)
-                {
-                    sums[i][j] = sums[i - 1][j] || sums[i - 1][j - nums[i - 1]];
-                }
-            }
-        }
+public class PartitionEqualSubsetSum {
 
-        return sums[nums.length][halfSum];
+  public static void main(String[] args) {
+    final int[] nums = {2, 2, 3, 5, 10};
+    System.out.println(new PartitionEqualSubsetSum().canPartition(nums));
+  }
+
+  public boolean canPartition(final int[] nums) {
+    final int sum = Arrays.stream(nums).sum();
+    if (sum % 2 == 1 || nums.length < 2) {
+      return false;
+    }
+    final int halfSum = sum / 2;
+    final boolean[][] sums = new boolean[nums.length + 1][halfSum + 1];
+    for (int i = 0; i <= nums.length; i++) {
+      sums[i][0] = true;
+    }
+    for (int i = 1; i <= nums.length; i++) {
+      for (int j = 1; j <= halfSum; j++) {
+        if (j - nums[i - 1] >= 0) {
+          sums[i][j] = sums[i - 1][j] || sums[i - 1][j - nums[i - 1]];
+        }
+      }
     }
 
-    public static void main(String[] args)
-    {
-        final int[] nums = {2, 2, 3, 5, 10};
-        System.out.println(new PartitionEqualSubsetSum().canPartition(nums));
-    }
+    return sums[nums.length][halfSum];
+  }
 }

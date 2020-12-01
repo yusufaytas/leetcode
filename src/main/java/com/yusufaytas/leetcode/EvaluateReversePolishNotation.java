@@ -40,57 +40,44 @@ Explanation:
 = 17 + 5
 = 22
  */
-public class EvaluateReversePolishNotation
-{
-    public int evalRPN(String[] tokens)
-    {
-        final Set<String> operators = new HashSet<>();
-        operators.add("+");
-        operators.add("-");
-        operators.add("*");
-        operators.add("/");
-        if (tokens.length > 0)
-        {
-            final Stack<Integer> stack = new Stack<>();
-            for (int i = 0; i < tokens.length; i++)
-            {
-                if (operators.contains(tokens[i]))
-                {
-                    final int op2 = stack.pop();
-                    final int op1 = stack.pop();
-                    final int result = applyOperator(op1, op2, tokens[i]);
-                    stack.push(result);
-                }
-                else
-                {
-                    stack.push(Integer.parseInt(tokens[i]));
-                }
-            }
-            return stack.pop();
-        }
-        return 0;
-    }
+public class EvaluateReversePolishNotation {
 
-    private int applyOperator(int op1, int op2, String token)
-    {
-        if (token.equals("+"))
-        {
-            return op1 + op2;
-        }
-        else if (token.equals("-"))
-        {
-            return op1 - op2;
-        }
-        else if (token.equals("*"))
-        {
-            return op1 * op2;
-        }
-        return op1 / op2;
-    }
+  public static void main(String[] args) {
+    final String[] tokens = {"10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"};
+    System.out.println(new EvaluateReversePolishNotation().evalRPN(tokens));
+  }
 
-    public static void main(String[] args)
-    {
-        final String[] tokens = {"10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"};
-        System.out.println(new EvaluateReversePolishNotation().evalRPN(tokens));
+  public int evalRPN(String[] tokens) {
+    final Set<String> operators = new HashSet<>();
+    operators.add("+");
+    operators.add("-");
+    operators.add("*");
+    operators.add("/");
+    if (tokens.length > 0) {
+      final Stack<Integer> stack = new Stack<>();
+      for (int i = 0; i < tokens.length; i++) {
+        if (operators.contains(tokens[i])) {
+          final int op2 = stack.pop();
+          final int op1 = stack.pop();
+          final int result = applyOperator(op1, op2, tokens[i]);
+          stack.push(result);
+        } else {
+          stack.push(Integer.parseInt(tokens[i]));
+        }
+      }
+      return stack.pop();
     }
+    return 0;
+  }
+
+  private int applyOperator(int op1, int op2, String token) {
+    if (token.equals("+")) {
+      return op1 + op2;
+    } else if (token.equals("-")) {
+      return op1 - op2;
+    } else if (token.equals("*")) {
+      return op1 * op2;
+    }
+    return op1 / op2;
+  }
 }

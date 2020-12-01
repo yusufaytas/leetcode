@@ -19,32 +19,26 @@ Note:
 
 Follow up: Could you improve it to O(n log n) time complexity?
  */
-public class LongestIncreasingSubsequence
-{
-    public int lengthOfLIS(final int[] nums)
-    {
-        if(nums.length == 0)
-        {
-            return 0;
-        }
-        final int[] localMax = new int[nums.length];
-        Arrays.fill(localMax, 1);
-        for (int i = 1; i < nums.length; i++)
-        {
-            for (int j = 0; j < i; j++)
-            {
-                if (nums[i] > nums[j])
-                {
-                    localMax[i] = Math.max(localMax[i], localMax[j] + 1);
-                }
-            }
-        }
-        return Arrays.stream(localMax).max().getAsInt();
-    }
+public class LongestIncreasingSubsequence {
 
-    public static void main(String[] args)
-    {
-        final int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
-        System.out.println(new LongestIncreasingSubsequence().lengthOfLIS(nums));
+  public static void main(String[] args) {
+    final int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
+    System.out.println(new LongestIncreasingSubsequence().lengthOfLIS(nums));
+  }
+
+  public int lengthOfLIS(final int[] nums) {
+    if (nums.length == 0) {
+      return 0;
     }
+    final int[] localMax = new int[nums.length];
+    Arrays.fill(localMax, 1);
+    for (int i = 1; i < nums.length; i++) {
+      for (int j = 0; j < i; j++) {
+        if (nums[i] > nums[j]) {
+          localMax[i] = Math.max(localMax[i], localMax[j] + 1);
+        }
+      }
+    }
+    return Arrays.stream(localMax).max().getAsInt();
+  }
 }

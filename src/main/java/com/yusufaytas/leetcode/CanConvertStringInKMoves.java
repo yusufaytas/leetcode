@@ -19,40 +19,33 @@ Remember that any index j can be picked at most once.
 
 Return true if it's possible to convert s into t in no more than k moves, otherwise return false.
  */
-public class CanConvertStringInKMoves
-{
-    public boolean canConvertString(final String s, final String t, int k)
-    {
-        if(s.length() != t.length())
-        {
-            return false;
-        }
-        final List<Integer> diffs = new ArrayList<>();
-        for (int i = 0; i < s.length(); i++)
-        {
-            if (s.charAt(i) != t.charAt(i))
-            {
-                diffs.add((t.charAt(i) - s.charAt(i) + 26) % 26);
-            }
-        }
-        final int[] used = new int[26];
-        for (int i = 0; i < diffs.size(); i++)
-        {
-            int diff = used[diffs.get(i)] == 0 ? diffs.get(i) : used[diffs.get(i)];
-            if (diff > k)
-            {
-                return false;
-            }
-            used[diffs.get(i)] = diff + 26;
-        }
-        return true;
-    }
+public class CanConvertStringInKMoves {
 
-    public static void main(String[] args)
-    {
-        final String s = "aab";
-        final String t = "bbb";
-        final int k = 27;
-        System.out.println(new CanConvertStringInKMoves().canConvertString(s, t, k));
+  public static void main(String[] args) {
+    final String s = "aab";
+    final String t = "bbb";
+    final int k = 27;
+    System.out.println(new CanConvertStringInKMoves().canConvertString(s, t, k));
+  }
+
+  public boolean canConvertString(final String s, final String t, int k) {
+    if (s.length() != t.length()) {
+      return false;
     }
+    final List<Integer> diffs = new ArrayList<>();
+    for (int i = 0; i < s.length(); i++) {
+      if (s.charAt(i) != t.charAt(i)) {
+        diffs.add((t.charAt(i) - s.charAt(i) + 26) % 26);
+      }
+    }
+    final int[] used = new int[26];
+    for (int i = 0; i < diffs.size(); i++) {
+      int diff = used[diffs.get(i)] == 0 ? diffs.get(i) : used[diffs.get(i)];
+      if (diff > k) {
+        return false;
+      }
+      used[diffs.get(i)] = diff + 26;
+    }
+    return true;
+  }
 }

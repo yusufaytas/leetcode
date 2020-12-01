@@ -35,27 +35,23 @@ Constraints:
 
 
  */
-public class GroupAnagrams
-{
-    public List<List<String>> groupAnagrams(final String[] strs)
-    {
-        final List<List<String>> groupedAnagrams = new ArrayList<>();
-        final Map<Map<Character, Integer>, Integer> groupIndex = new HashMap<>();
-        for (int i = 0; i < strs.length; i++)
-        {
-            final Map<Character, Integer> letterSet = new HashMap<>();
-            for (int j = 0; j < strs[i].length(); j++)
-            {
-                letterSet.put(strs[i].charAt(j), letterSet.getOrDefault(strs[i].charAt(j), 0) + 1);
-            }
-            final int index = groupIndex.getOrDefault(letterSet, groupedAnagrams.size());
-            if (index == groupedAnagrams.size())
-            {
-                groupedAnagrams.add(new ArrayList<>());
-                groupIndex.put(letterSet, index);
-            }
-            groupedAnagrams.get(index).add(strs[i]);
-        }
-        return groupedAnagrams;
+public class GroupAnagrams {
+
+  public List<List<String>> groupAnagrams(final String[] strs) {
+    final List<List<String>> groupedAnagrams = new ArrayList<>();
+    final Map<Map<Character, Integer>, Integer> groupIndex = new HashMap<>();
+    for (int i = 0; i < strs.length; i++) {
+      final Map<Character, Integer> letterSet = new HashMap<>();
+      for (int j = 0; j < strs[i].length(); j++) {
+        letterSet.put(strs[i].charAt(j), letterSet.getOrDefault(strs[i].charAt(j), 0) + 1);
+      }
+      final int index = groupIndex.getOrDefault(letterSet, groupedAnagrams.size());
+      if (index == groupedAnagrams.size()) {
+        groupedAnagrams.add(new ArrayList<>());
+        groupIndex.put(letterSet, index);
+      }
+      groupedAnagrams.get(index).add(strs[i]);
     }
+    return groupedAnagrams;
+  }
 }

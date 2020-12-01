@@ -30,98 +30,80 @@ LRUCache cache = new LRUCache(2);
         cache.get(4);       // returns 4
 
  */
-public class LRUCache
-{
-    Node head, tail;
-    final Map<Integer, Node> map = new HashMap<>();
-    final int capacity;
+public class LRUCache {
 
-    public LRUCache(final int capacity)
-    {
-        this.capacity = capacity;
-    }
+  final Map<Integer, Node> map = new HashMap<>();
+  final int capacity;
+  Node head, tail;
 
-    public int get(final int key)
-    {
-        if (map.containsKey(key))
-        {
-            final Node node = map.get(key);
-            removeLink(node);
-            put(key, node.value);
-            return node.value;
-        }
-        return -1;
-    }
+  public LRUCache(final int capacity) {
+    this.capacity = capacity;
+  }
 
-    public void put(final int key, final int value)
-    {
-        if (map.containsKey(key))
-        {
-            removeLink(map.get(key));
-        }
-        else if (map.size() == capacity)
-        {
-            map.remove(tail.key);
-            tail = tail.prev;
-            if (tail != null)
-            {
-                tail.next = null;
-            }
-        }
-        final Node newNode = new Node();
-        newNode.next = head;
-        newNode.value = value;
-        newNode.key = key;
-        if (head != null)
-        {
-            head.prev = newNode;
-        }
-        head = newNode;
-        if (tail == null)
-        {
-            tail = head;
-        }
-        map.put(key, newNode);
-    }
+  public static void main(String[] args) {
+    LRUCache cache = new LRUCache(2);
+    System.out.println(cache.get(2));       // returns 1
+    cache.put(2, 6);    // evicts key 2
+    System.out.println(cache.get(1));       // returns -1 (not found)
+    cache.put(1, 5);    // evicts key 1
+    cache.put(1, 2);    // evicts key 1
+    System.out.println(cache.get(1));       // returns -1 (not found)
+    System.out.println(cache.get(2));       // returns 3
+  }
 
-    private void removeLink(final Node node)
-    {
-        if (node.prev != null)
-        {
-            node.prev.next = node.next;
-        }
-        else
-        {
-            head = node.next;
-        }
-        if (node.next != null)
-        {
-            node.next.prev = node.prev;
-        }
-        else
-        {
-            tail = node.prev;
-        }
+  public int get(final int key) {
+    if (map.containsKey(key)) {
+      final Node node = map.get(key);
+      removeLink(node);
+      put(key, node.value);
+      return node.value;
     }
+    return -1;
+  }
 
-    private class Node
-    {
-        int key;
-        int value;
-        Node next;
-        Node prev;
+  public void put(final int key, final int value) {
+    if (map.containsKey(key)) {
+      removeLink(map.get(key));
+    } else if (map.size() == capacity) {
+      map.remove(tail.key);
+      tail = tail.prev;
+      if (tail != null) {
+        tail.next = null;
+      }
     }
+    final Node newNode = new Node();
+    newNode.next = head;
+    newNode.value = value;
+    newNode.key = key;
+    if (head != null) {
+      head.prev = newNode;
+    }
+    head = newNode;
+    if (tail == null) {
+      tail = head;
+    }
+    map.put(key, newNode);
+  }
 
-    public static void main(String[] args)
-    {
-        LRUCache cache = new LRUCache(2);
-        System.out.println(cache.get(2));       // returns 1
-        cache.put(2, 6);    // evicts key 2
-        System.out.println(cache.get(1));       // returns -1 (not found)
-        cache.put(1, 5);    // evicts key 1
-        cache.put(1, 2);    // evicts key 1
-        System.out.println(cache.get(1));       // returns -1 (not found)
-        System.out.println(cache.get(2));       // returns 3
+  private void removeLink(final Node node) {
+    if (node.prev != null) {
+      node.prev.next = node.next;
+    } else {
+      head = node.next;
     }
+    if (node.next != null) {
+      node.next.prev = node.prev;
+    } else {
+      tail = node.prev;
+    }
+  }
+
+  private class Node {
+
+    int key;
+    int value;
+    Node next;
+    Node prev;
+  }
 
 }

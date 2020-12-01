@@ -18,41 +18,30 @@ nums2 = [2,5,6],       n = 3
 
 Output: [1,2,2,3,5,6]
  */
-public class MergeSortedArray
-{
-    public void merge(final int[] nums1, final int m, final int[] nums2, final int n)
-    {
-        for (int i = 1; i <= m; i++)
-        {
-            nums1[nums1.length - i] = nums1[m - i];
-        }
-        int i = nums1.length - m, j = 0, k = 0;
-        while (k < n + m)
-        {
-            if (i == nums1.length)
-            {
-                nums1[k++] = nums2[j++];
-            }
-            else if (j == n)
-            {
-                nums1[k++] = nums1[i++];
-            }
-            else if (nums1[i] > nums2[j])
-            {
-                nums1[k++] = nums2[j++];
-            }
-            else
-            {
-                nums1[k++] = nums1[i++];
-            }
-        }
-    }
+public class MergeSortedArray {
 
-    public static void main(String[] args)
-    {
-        final int[] nums1 = {1, 2, 3, 0, 0, 0};
-        final int[] nums2 = {2, 5, 6};
-        new MergeSortedArray().merge(nums1, 3, nums2, 3);
-        printArray(nums1);
+  public static void main(String[] args) {
+    final int[] nums1 = {1, 2, 3, 0, 0, 0};
+    final int[] nums2 = {2, 5, 6};
+    new MergeSortedArray().merge(nums1, 3, nums2, 3);
+    printArray(nums1);
+  }
+
+  public void merge(final int[] nums1, final int m, final int[] nums2, final int n) {
+    for (int i = 1; i <= m; i++) {
+      nums1[nums1.length - i] = nums1[m - i];
     }
+    int i = nums1.length - m, j = 0, k = 0;
+    while (k < n + m) {
+      if (i == nums1.length) {
+        nums1[k++] = nums2[j++];
+      } else if (j == n) {
+        nums1[k++] = nums1[i++];
+      } else if (nums1[i] > nums2[j]) {
+        nums1[k++] = nums2[j++];
+      } else {
+        nums1[k++] = nums1[i++];
+      }
+    }
+  }
 }

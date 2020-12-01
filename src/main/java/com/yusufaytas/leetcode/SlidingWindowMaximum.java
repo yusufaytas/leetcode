@@ -31,34 +31,29 @@ You may assume k is always valid, 1 ≤ k ≤ input array's size for non-empty a
 Follow up:
 Could you solve it in linear time?
  */
-public class SlidingWindowMaximum
-{
-    public int[] maxSlidingWindow(final int[] nums, final int k)
-    {
-        if (nums.length < k || k == 0)
-        {
-            return new int[]{};
-        }
-        final Queue<Integer> slidingWindow = new PriorityQueue<>(Comparator.reverseOrder());
-        final int[] maxForWindow = new int[nums.length - k + 1];
-        for (int i = 0; i < k; i++)
-        {
-            slidingWindow.add(nums[i]);
-        }
-        for (int i = 0; i < nums.length - k; i++)
-        {
-            maxForWindow[i] = slidingWindow.peek();
-            slidingWindow.remove(nums[i]);
-            slidingWindow.add(nums[i + k]);
-        }
-        maxForWindow[nums.length - k] = slidingWindow.peek();
-        return maxForWindow;
-    }
+public class SlidingWindowMaximum {
 
-    public static void main(String[] args)
-    {
-        final int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
-        final int k = 3;
-        System.out.println(Arrays.toString(new SlidingWindowMaximum().maxSlidingWindow(nums, k)));
+  public static void main(String[] args) {
+    final int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
+    final int k = 3;
+    System.out.println(Arrays.toString(new SlidingWindowMaximum().maxSlidingWindow(nums, k)));
+  }
+
+  public int[] maxSlidingWindow(final int[] nums, final int k) {
+    if (nums.length < k || k == 0) {
+      return new int[]{};
     }
+    final Queue<Integer> slidingWindow = new PriorityQueue<>(Comparator.reverseOrder());
+    final int[] maxForWindow = new int[nums.length - k + 1];
+    for (int i = 0; i < k; i++) {
+      slidingWindow.add(nums[i]);
+    }
+    for (int i = 0; i < nums.length - k; i++) {
+      maxForWindow[i] = slidingWindow.peek();
+      slidingWindow.remove(nums[i]);
+      slidingWindow.add(nums[i + k]);
+    }
+    maxForWindow[nums.length - k] = slidingWindow.peek();
+    return maxForWindow;
+  }
 }

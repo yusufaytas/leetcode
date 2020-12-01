@@ -17,26 +17,22 @@ Note:
     Minimize the total number of operations.
 
  */
-public class MoveZeroes
-{
-    public void moveZeroes(int[] nums)
-    {
-        int nonZeroIndex = -1;
-        for (int i = 0; i < nums.length; i++)
-        {
-            if(nums[i] != 0)
-            {
-                int temp = nums[i];
-                nums[i] = 0;
-                nums[++nonZeroIndex] = temp;
-            }
-        }
-    }
+public class MoveZeroes {
 
-    public static void main(String [] args)
-    {
-        final int [] nums = {1};
-        new MoveZeroes().moveZeroes(nums);
-        printArray(nums);
+  public static void main(String[] args) {
+    final int[] nums = {1};
+    new MoveZeroes().moveZeroes(nums);
+    printArray(nums);
+  }
+
+  public void moveZeroes(int[] nums) {
+    int nonZeroIndex = -1;
+    for (int i = 0; i < nums.length; i++) {
+      if (nums[i] != 0) {
+        int temp = nums[i];
+        nums[i] = 0;
+        nums[++nonZeroIndex] = temp;
+      }
     }
+  }
 }

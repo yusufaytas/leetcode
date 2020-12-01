@@ -27,63 +27,55 @@ The given list may contain duplicates, so ascending order means >= here.
 For Java users, please note that the input type has been changed to List<List<Integer>>.
 And after you reset the code template, you'll see this point.
  */
-public class SmallestRange
-{
-    public int[] smallestRange(List<List<Integer>> nums)
-    {
-        if (nums.size() == 0 || nums.stream().anyMatch(l -> l.isEmpty()))
-        {
-            return null;
-        }
-        int[] indexes = new int[nums.size()];
-        int min = 0, max = Integer.MAX_VALUE - 1, currentMax = Integer.MIN_VALUE;
-        PriorityQueue<Integer> heap = new PriorityQueue<>(Comparator.comparingInt(o -> nums.get(o).get(indexes[o])));
-        for (int i = 0; i < nums.size(); i++)
-        {
-            heap.add(i);
-            if (nums.get(i).get(0) > currentMax)
-            {
-                currentMax = nums.get(i).get(0);
-            }
-        }
+public class SmallestRange {
 
-        while (true)
-        {
-            int currentMinList = heap.poll();
-            int currentMin = nums.get(currentMinList).get(indexes[currentMinList]);
+  public static void main(String[] args) {
+    List<List<Integer>> nums = new ArrayList<>();
+    List<Integer> l1 = new ArrayList<>();
+    Collections.addAll(l1, -40, -20, 1, 9, 12, 12, 14);
+    List<Integer> l2 = new ArrayList<>();
+    Collections.addAll(l2, -39, 42, 70, 70, 70, 71, 72, 72, 73);
+    List<Integer> l3 = new ArrayList<>();
+    Collections.addAll(l3, -2, 6, 11, 12, 12, 13, 15);
+    Collections.addAll(nums, l1, l2, l3);
+    System.out.println(Arrays.toString(new SmallestRange().smallestRange(nums)));
+  }
 
-            if (currentMax - currentMin < max - min)
-            {
-                max = currentMax;
-                min = currentMin;
-            }
-
-            indexes[currentMinList]++;
-
-            if (indexes[currentMinList] >= nums.get(currentMinList).size())
-            {
-                break;
-            }
-
-            if (nums.get(currentMinList).get(indexes[currentMinList]) > currentMax)
-            {
-                currentMax = nums.get(currentMinList).get(indexes[currentMinList]);
-            }
-            heap.add(currentMinList);
-        }
-        return new int[]{max, min};
+  public int[] smallestRange(List<List<Integer>> nums) {
+    if (nums.size() == 0 || nums.stream().anyMatch(l -> l.isEmpty())) {
+      return null;
+    }
+    int[] indexes = new int[nums.size()];
+    int min = 0, max = Integer.MAX_VALUE - 1, currentMax = Integer.MIN_VALUE;
+    PriorityQueue<Integer> heap = new PriorityQueue<>(
+        Comparator.comparingInt(o -> nums.get(o).get(indexes[o])));
+    for (int i = 0; i < nums.size(); i++) {
+      heap.add(i);
+      if (nums.get(i).get(0) > currentMax) {
+        currentMax = nums.get(i).get(0);
+      }
     }
 
-    public static void main(String[] args)
-    {
-        List<List<Integer>> nums = new ArrayList<>();
-        List<Integer> l1 = new ArrayList<>();
-        Collections.addAll(l1, -40, -20, 1, 9, 12, 12, 14);
-        List<Integer> l2 = new ArrayList<>();
-        Collections.addAll(l2, -39, 42, 70, 70, 70, 71, 72, 72, 73);
-        List<Integer> l3 = new ArrayList<>();
-        Collections.addAll(l3, -2, 6, 11, 12, 12, 13, 15);
-        Collections.addAll(nums, l1, l2, l3);
-        System.out.println(Arrays.toString(new SmallestRange().smallestRange(nums)));
+    while (true) {
+      int currentMinList = heap.poll();
+      int currentMin = nums.get(currentMinList).get(indexes[currentMinList]);
+
+      if (currentMax - currentMin < max - min) {
+        max = currentMax;
+        min = currentMin;
+      }
+
+      indexes[currentMinList]++;
+
+      if (indexes[currentMinList] >= nums.get(currentMinList).size()) {
+        break;
+      }
+
+      if (nums.get(currentMinList).get(indexes[currentMinList]) > currentMax) {
+        currentMax = nums.get(currentMinList).get(indexes[currentMinList]);
+      }
+      heap.add(currentMinList);
     }
+    return new int[]{max, min};
+  }
 }

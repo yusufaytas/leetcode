@@ -32,55 +32,47 @@ You do not necessarily need to follow this format, so please be creative and com
 Note: Do not use class member/global/static variables to store states. Your serialize and deserialize algorithms should be stateless.
  */
 //Serialize and Deserialize Binary Tree
-public class Codec
-{
+public class Codec {
 
-    // Encodes a tree to a single string.
-    public String serialize(final TreeNode root)
-    {
-        if (root == null)
-        {
-            return ",";
-        }
-        return root.val + "," + serialize(root.left) + serialize(root.right);
-    }
+  public static void main(String[] args) {
+    final Codec codec = new Codec();
+    final TreeNode treeNode = new TreeNode(1);
+    treeNode.right = new TreeNode(3);
+    treeNode.right.right = new TreeNode(5);
+    treeNode.left = new TreeNode(2);
+    treeNode.left.right = new TreeNode(10);
+    System.out.println(codec.serialize(treeNode));
+    System.out.println(codec.serialize(codec.deserialize(codec.serialize(treeNode))));
+  }
 
-    // Decodes your encoded data to tree.
-    public TreeNode deserialize(final String data)
-    {
-        if (data.isEmpty())
-        {
-            return null;
-        }
-        final Queue<String> nodes = Arrays
-                .stream(data.split(","))
-                .map(String::trim)
-                .collect(Collectors.toCollection(ArrayDeque::new));
-        return constructTree(nodes);
+  // Encodes a tree to a single string.
+  public String serialize(final TreeNode root) {
+    if (root == null) {
+      return ",";
     }
+    return root.val + "," + serialize(root.left) + serialize(root.right);
+  }
 
-    private TreeNode constructTree(final Queue<String> nodes)
-    {
-        final String val = nodes.poll();
-        if (val == null || val.isEmpty())
-        {
-            return null;
-        }
-        final TreeNode treeNode = new TreeNode(Integer.parseInt(val));
-        treeNode.left = constructTree(nodes);
-        treeNode.right = constructTree(nodes);
-        return treeNode;
+  // Decodes your encoded data to tree.
+  public TreeNode deserialize(final String data) {
+    if (data.isEmpty()) {
+      return null;
     }
+    final Queue<String> nodes = Arrays
+        .stream(data.split(","))
+        .map(String::trim)
+        .collect(Collectors.toCollection(ArrayDeque::new));
+    return constructTree(nodes);
+  }
 
-    public static void main(String[] args)
-    {
-        final Codec codec = new Codec();
-        final TreeNode treeNode = new TreeNode(1);
-        treeNode.right = new TreeNode(3);
-        treeNode.right.right = new TreeNode(5);
-        treeNode.left = new TreeNode(2);
-        treeNode.left.right = new TreeNode(10);
-        System.out.println(codec.serialize(treeNode));
-        System.out.println(codec.serialize(codec.deserialize(codec.serialize(treeNode))));
+  private TreeNode constructTree(final Queue<String> nodes) {
+    final String val = nodes.poll();
+    if (val == null || val.isEmpty()) {
+      return null;
     }
+    final TreeNode treeNode = new TreeNode(Integer.parseInt(val));
+    treeNode.left = constructTree(nodes);
+    treeNode.right = constructTree(nodes);
+    return treeNode;
+  }
 }

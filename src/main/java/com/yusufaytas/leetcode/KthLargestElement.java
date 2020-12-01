@@ -21,21 +21,18 @@ Note:
 You may assume k is always valid, 1 ≤ k ≤ array's length.
 
  */
-public class KthLargestElement
-{
-    public int findKthLargest(int[] nums, int k)
-    {
-        if (nums == null || nums.length == 0)
-        {
-            return -1;
-        }
-        Arrays.sort(nums);
-        return nums[nums.length-k];
-    }
+public class KthLargestElement {
 
-    public static void main(String[] args)
-    {
-        final int[] nums = {3, 2, 1, 5, 6, 4};
-        System.out.println(new KthLargestElement().findKthLargest(nums, 2));
+  public static void main(String[] args) {
+    final int[] nums = {3, 2, 1, 5, 6, 4};
+    System.out.println(new KthLargestElement().findKthLargest(nums, 2));
+  }
+
+  public int findKthLargest(int[] nums, int k) {
+    if (nums == null || nums.length == 0) {
+      return -1;
     }
+    Arrays.sort(nums);
+    return nums[nums.length - k];
+  }
 }
