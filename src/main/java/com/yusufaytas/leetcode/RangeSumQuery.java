@@ -28,13 +28,17 @@ public class RangeSumQuery {
 
   static class NumArray {
 
-    final int[][] sums;
+    final int[] sums;
 
     public NumArray(final int[] nums) {
-      sums = new int[nums.length][nums.length];
-      for (int i = 0; i < nums.length; i++) {
-        for (int j = i; j < nums.length; j++) {
-          sums[i][j] = (j - 1 >= i ? sums[i][j - 1] : 0) +  nums[j];
+      if (nums == null) {
+        throw new IllegalArgumentException();
+      }
+      sums = new int[nums.length];
+      if (nums.length > 0) {
+        sums[0] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+          sums[i] = nums[i] + sums[i - 1];
         }
       }
     }
@@ -43,13 +47,13 @@ public class RangeSumQuery {
       if (i >= sums.length || j >= sums.length || i > j || i < 0 || j < 0) {
         return -1;
       }
-      return sums[i][j];
+      return sums[j] - (i > 0 ? sums[i - 1] : 0);
     }
   }
 
   public static void main(String[] args) {
-    final int[] nums = {-2, 0, 3, -5, 2, -1};
-    System.out.println(new NumArray(nums).sumRange(0, 5));
+    final int[] nums = {-4,-5};
+    System.out.println(new NumArray(nums).sumRange(1, 1));
   }
 
 }
