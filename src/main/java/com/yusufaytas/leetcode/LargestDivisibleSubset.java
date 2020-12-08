@@ -1,12 +1,9 @@
 package com.yusufaytas.leetcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /*
 Given a set of distinct positive integers, find the largest subset such that every pair
@@ -26,6 +23,7 @@ Example 2:
 Input: [1,2,4,8]
 Output: [1,2,4,8]
 
+//TODO: revisit
  */
 public class LargestDivisibleSubset {
 
@@ -33,46 +31,28 @@ public class LargestDivisibleSubset {
     if (nums == null || nums.length == 0) {
       return Collections.emptyList();
     }
-    return largestDivisibleSubset(new HashSet<>(),
-        IntStream.of(nums).boxed().collect(Collectors.toList()));
-  }
-
-  public List<Integer> largestDivisibleSubset(final Set<Integer> current,
-      final List<Integer> remaining) {
-    if (remaining.isEmpty()) {
-      return new ArrayList<>(current);
+    Arrays.sort(nums);
+    final List<Integer>[] divisibleSubsets = new List[nums.length];
+    for (int i = 0; i < nums.length; i++) {
+      divisibleSubsets[i] = new ArrayList<>(Arrays.asList(nums[i]));
     }
-    List<Integer> largestSoFar = Collections.emptyList();
-    for (int i = 0; i < remaining.size(); i++) {
-      final int num = remaining.get(i);
-      final boolean isDivisible = isDivisible(current, num);
-      if (isDivisible) {
-        current.add(num);
-      }
-      remaining.remove(i);
-      final List<Integer> largest = largestDivisibleSubset(current, remaining);
-      if (largest.size() > largestSoFar.size()) {
-        largestSoFar = largest;
-      }
-      remaining.add(i, num);
-      if (isDivisible) {
-        current.remove(num);
+    List<Integer> max = divisibleSubsets[0];
+    for (int i = 1; i < nums.length; i++) {
+      for (int j = 0; j < i; j++) {
+        if (nums[i] % nums[j] == 0 && divisibleSubsets[j].size() >= divisibleSubsets[i].size()) {
+          divisibleSubsets[i] = new ArrayList<>(divisibleSubsets[j]);
+          divisibleSubsets[i].add(nums[i]);
+          if (divisibleSubsets[i].size() > max.size()) {
+            max = divisibleSubsets[i];
+          }
+        }
       }
     }
-    return largestSoFar;
-  }
-
-  public boolean isDivisible(final Set<Integer> nums, final int nextNum) {
-    for (final int num : nums) {
-      if (num % nextNum != 0 && nextNum % num != 0) {
-        return false;
-      }
-    }
-    return true;
+    return max;
   }
 
   public static void main(String[] args) {
-    int[] nums = {2, 3, 5, 7, 11, 13, 17, 19, 23, 31, 1000000007};
+    int[] nums = {1, 2, 3, 4, 9, 27, 81};
     System.out.println(new LargestDivisibleSubset().largestDivisibleSubset(nums));
   }
 }
