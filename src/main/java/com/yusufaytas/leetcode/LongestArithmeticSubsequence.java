@@ -1,6 +1,5 @@
 package com.yusufaytas.leetcode;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +42,6 @@ public class LongestArithmeticSubsequence {
       return nums.length;
     }
     int max = 1;
-    Arrays.sort(nums);
     final Map<Integer, Integer>[] subsequences = new Map[nums.length];
     for (int i = 0; i < subsequences.length; i++) {
       subsequences[i] = new HashMap<>();
