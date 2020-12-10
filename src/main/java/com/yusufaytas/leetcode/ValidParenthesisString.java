@@ -1,8 +1,5 @@
 package com.yusufaytas.leetcode;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 /*
  Given a string containing only three types of characters: '(', ')' and '*',
  write a function to check whether this string is valid. We define the validity of a string by these rules:
@@ -35,44 +32,45 @@ public class ValidParenthesisString {
     if (s == null || s.isEmpty()) {
       return true;
     }
-    return checkValidString(s, 0, new ArrayDeque<>());
+    //first index, second parenthesis count
+    final int[][] valid = new int[s.length()][s.length()];
+    return checkValidString(s, 0, 0, valid);
   }
 
-  public boolean checkValidString(final String s, final int index, final Deque<Character> stack) {
+  //0 not computed 1 true -1 false
+  public boolean checkValidString(final String s, final int index, final int count,
+      final int[][] valid) {
     if (index == s.length()) {
-      if (stack.isEmpty()) {
+      if (count == 0) {
         return true;
       }
       return false;
     }
+    if (valid[index][count] != 0) {
+      return valid[index][count] == 1;
+    }
     boolean hasValid = false;
     final char c = s.charAt(index);
     if (c == '*') {
-      final Deque<Character> skipStack = new ArrayDeque<>(stack);
-      hasValid = hasValid || checkValidString(s, index + 1, skipStack);
+      hasValid = hasValid || checkValidString(s, index + 1, count, valid);
       if (!hasValid) {
-        final Deque<Character> leftChar = new ArrayDeque<>(stack);
-        leftChar.push('(');
-        hasValid = hasValid || checkValidString(s, index + 1, leftChar);
+        hasValid = hasValid || checkValidString(s, index + 1, count + 1, valid);
       }
-      if (!hasValid && !stack.isEmpty()) {
-        final Deque<Character> rightChar = new ArrayDeque<>(stack);
-        rightChar.pop();
-        hasValid = hasValid || checkValidString(s, index + 1, rightChar);
+      if (!hasValid && count != 0) {
+        hasValid = hasValid || checkValidString(s, index + 1, count - 1, valid);
       }
     } else if (c == ')') {
-      if (stack.isEmpty()) {
+      if (count == 0) {
+        valid[index][count] = -1;
         return false;
       }
-      stack.pop();
-      hasValid = hasValid || checkValidString(s, index + 1, stack);
+      hasValid = hasValid || checkValidString(s, index + 1, count - 1, valid);
     } else {
-      stack.push('(');
-      hasValid = hasValid || checkValidString(s, index + 1, stack);
+      hasValid = hasValid || checkValidString(s, index + 1, count + 1, valid);
     }
+    valid[index][count] = hasValid ? 1 : -1;
     return hasValid;
   }
-
 
   public static void main(String[] args) {
     final String s = "(((((*(()((((*((**(((()()*)()()()*((((**)())*)*)))))))(())(()))())((*()()(((()((()*(())*(()**)()(())";
