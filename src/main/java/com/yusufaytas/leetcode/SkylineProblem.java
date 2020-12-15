@@ -3,7 +3,12 @@ package com.yusufaytas.leetcode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /*
 A city's skyline is the outer contour of the silhouette formed by all the buildings
@@ -48,27 +53,38 @@ public class SkylineProblem {
     if (buildings == null || buildings.length == 0) {
       return Collections.emptyList();
     }
-    int end = 0;
+    final Comparator<int[]> comparator = Comparator.comparingInt(value -> value[0]);
+    Arrays.sort(buildings, comparator);
+    final Map<Integer, Integer> intersections = new HashMap<>();
     for (int i = 0; i < buildings.length; i++) {
-      if (buildings[i][1] > end) {
-        end = buildings[i][1];
+      if (intersections.getOrDefault(buildings[i][0], 0) < buildings[i][2]) {
+        intersections.put(buildings[i][0], buildings[i][2]);
+      }
+      if (!intersections.containsKey(buildings[i][1])) {
+        intersections.put(buildings[i][1], 0);
       }
     }
-    final int[] maxHeights = new int[end + 1];
-    for (int i = 0; i < buildings.length; i++) {
-      for (int j = buildings[i][0]; j < buildings[i][1]; j++) {
-        if (buildings[i][2] > maxHeights[j]) {
-          maxHeights[j] = buildings[i][2];
+    for (final int key : intersections.keySet()) {
+      final int searchIndex = Arrays.binarySearch(buildings, new int[]{0, key}, comparator);
+      final int startIndex =
+          searchIndex < 0 ? Math.min(Math.abs(searchIndex + 1), buildings.length) : searchIndex;
+      for (int i = startIndex; i < buildings.length; i++) {
+        if (key < buildings[i][0]) {
+          break;
+        }
+        if (key >= buildings[i][0] && key < buildings[i][1]) {
+          intersections.put(key, Math.max(intersections.get(key), buildings[i][2]));
         }
       }
     }
     final List<List<Integer>> points = new ArrayList<>();
     int prev = 0;
-    for (int i = 0; i < maxHeights.length; i++) {
-      if (maxHeights[i] != prev) {
-        points.add(Arrays.asList(i, maxHeights[i]));
+    for (final Entry<Integer, Integer> entry : intersections.entrySet().stream()
+        .sorted(Comparator.comparingInt(Entry::getKey)).collect(Collectors.toList())) {
+      if (entry.getValue() != prev) {
+        points.add(Arrays.asList(entry.getKey(), entry.getValue()));
       }
-      prev = maxHeights[i];
+      prev = entry.getValue();
     }
     return points;
   }
