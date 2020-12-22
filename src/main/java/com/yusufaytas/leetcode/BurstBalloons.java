@@ -1,12 +1,6 @@
 package com.yusufaytas.leetcode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.Arrays;
 
 /*
 You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it
@@ -26,10 +20,10 @@ nums = [3,1,5,8] --> [3,5,8] --> [3,8] --> [8] --> []
 coins =  3*1*5    +   3*5*8   +  1*3*8  + 1*8*1 = 167
 
 Example 2:
-
 Input: nums = [1,5]
 Output: 10
 
+//TODO: revisit
  */
 public class BurstBalloons {
 
@@ -37,35 +31,33 @@ public class BurstBalloons {
     if (nums == null || nums.length == 0) {
       return -1;
     }
-    final List<Integer> remainingIndexes = IntStream.range(0, nums.length).boxed()
-        .collect(Collectors.toCollection(LinkedList::new));
-    final Map<List<Integer>, Integer> visited = new HashMap<>();
-    return maxCoins(nums, remainingIndexes, visited);
+    final int[][] visited = new int[nums.length][nums.length];
+    for (int i = 0; i < nums.length; i++) {
+      Arrays.fill(visited[i], -1);
+    }
+    return maxCoins(nums, visited, 0, nums.length - 1);
   }
 
-  public int maxCoins(final int[] nums, final List<Integer> remainingIndexes,
-      final Map<List<Integer>, Integer> visited) {
-    if (remainingIndexes.size() == 1) {
-      return nums[remainingIndexes.get(0)];
+  public int maxCoins(final int[] nums, final int[][] visited, final int start, final int end) {
+    if (start > end) {
+      return 0;
     }
-    if (visited.containsKey(remainingIndexes)) {
-      return visited.get(remainingIndexes);
+    if (visited[start][end] != -1) {
+      return visited[start][end];
     }
     int max = 0;
-    for (int i = 0; i < remainingIndexes.size(); i++) {
-      final int left = i > 0 ? nums[remainingIndexes.get(i - 1)] : 1;
-      final int right = i + 1 < remainingIndexes.size() ? nums[remainingIndexes.get(i + 1)] : 1;
-      final int value = left * right * nums[remainingIndexes.get(i)];
-      final int index = remainingIndexes.remove(i);
-      max = Math.max(value + maxCoins(nums, remainingIndexes, visited), max);
-      remainingIndexes.add(i, index);
+    for (int i = start; i <= end; i++) {
+      final int leftMax = maxCoins(nums, visited, start, i - 1);
+      final int rightMax = maxCoins(nums, visited, i + 1, end);
+      final int product = (start > 0 ? nums[start - 1] : 1) *
+          (end < nums.length - 1 ? nums[end + 1] : 1) * nums[i];
+      max = Math.max(max, product + leftMax + rightMax);
     }
-    visited.put(new ArrayList<>(remainingIndexes), max);
-    return max;
+    return visited[start][end] = max;
   }
 
   public static void main(String[] args) {
-    final int[] nums = {8, 2, 6, 8, 9, 8, 1, 4, 1, 5, 3, 0, 7, 7, 0, 4, 2, 2, 5};
+    final int[] nums = {3, 1, 5, 8};
     System.out.println(new BurstBalloons().maxCoins(nums));
   }
 }
