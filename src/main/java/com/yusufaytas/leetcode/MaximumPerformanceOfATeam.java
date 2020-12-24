@@ -1,11 +1,9 @@
 package com.yusufaytas.leetcode;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -31,12 +29,9 @@ Output: 68
 Explanation:
 This is the same example as the first but k = 3. We can select engineer 1,
 engineer 2 and engineer 5 to get the maximum performance of the team. That is, performance = (2 + 10 + 5) * min(5, 4, 7) = 68.
-
 Example 3:
-
 Input: n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 4
 Output: 72
-
  */
 public class MaximumPerformanceOfATeam {
 
@@ -44,38 +39,27 @@ public class MaximumPerformanceOfATeam {
     if (speed == null || speed.length == 0 || efficiency == null || efficiency.length == 0) {
       return 0;
     }
-    final Map<Set<Integer>, Integer> visited = new HashMap<>();
-    maxPerformance(speed, efficiency, new HashSet<>(),
-        IntStream.range(0, efficiency.length).boxed().collect(
-            Collectors.toCollection(LinkedList::new)), k, visited);
-    return visited.values().stream().max(Integer::compareTo).get();
-  }
+    final List<Integer> sortedEfficiencies = IntStream.range(0, speed.length).boxed()
+        .sorted(Comparator.comparingInt(o -> efficiency[(int) o]).reversed())
+        .collect(Collectors.toList());
+    final Queue<Integer> queue = new PriorityQueue<>(Comparator.comparingInt(o -> speed[o]));
 
-  public void maxPerformance(final int[] speed, final int[] efficiency, final Set<Integer> current,
-      final List<Integer> remaining, final int k, final Map<Set<Integer>, Integer> visited) {
-    if (k < 0 || visited.containsKey(current)) {
-      return;
-    }
-    if (current.size() > 0) {
-      int speedSum = 0;
-      int minEfficiency = Integer.MAX_VALUE;
-      for (final int index : current) {
-        speedSum += speed[index];
-        minEfficiency = Math.min(minEfficiency, efficiency[index]);
+    long max = 0, currentSum = 0, currentMin = Integer.MAX_VALUE;
+    for (int i = 0; i < sortedEfficiencies.size(); i++) {
+      if (queue.size() == k) {
+        final int removalIndex = queue.poll();
+        currentSum -= speed[removalIndex];
       }
-      visited.put(new HashSet<>(current), speedSum * minEfficiency);
+      queue.add(sortedEfficiencies.get(i));
+      currentSum += speed[sortedEfficiencies.get(i)];
+      currentMin = Math.min(efficiency[sortedEfficiencies.get(i)], currentMin);
+      max = Math.max(currentSum * currentMin, max);
     }
-    for (int i = 0; i < remaining.size(); i++) {
-      final int index = remaining.remove(i);
-      current.add(index);
-      maxPerformance(speed, efficiency, current, remaining, k - 1, visited);
-      current.remove(index);
-      remaining.add(i, index);
-    }
+    return (int) (max % (Math.pow(10, 9) + 7));
   }
 
   public static void main(String[] args) {
-    final int n = 4, k = 3;
+    final int n = 4, k = 4;
     final int[] speed = {2, 10, 3, 1, 5, 8};
     final int[] efficiency = {5, 4, 3, 9, 7, 2};
     System.out.println(new MaximumPerformanceOfATeam().maxPerformance(n, speed, efficiency, k));
