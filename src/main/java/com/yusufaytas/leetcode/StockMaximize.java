@@ -1,12 +1,9 @@
 package com.yusufaytas.leetcode;
 
-public class StockMaximize {
+import java.util.Arrays;
+import java.util.List;
 
-  public static void main(String[] args) {
-    int fee = 2;
-    int[] prices = {1, 3, 2, 8, 4, 9};
-    System.out.println(new StockMaximize().maxProfit(prices, fee));
-  }
+public class StockMaximize {
 
   public int maxProfit(int[] prices) {
     if (prices.length < 2) {
@@ -66,5 +63,26 @@ public class StockMaximize {
       }
     }
     return total;
+  }
+
+  //Allows buying as much as possible
+  public long maximumProfit(final List<Integer> prices) {
+    if (prices == null || prices.size() < 2) {
+      return 0;
+    }
+    long total = 0;
+    int localMax = prices.get(prices.size() - 1);
+    for (int i = prices.size() - 2; i >= 0; i--) {
+      if (localMax < prices.get(i)) {
+        localMax = prices.get(i);
+        continue;
+      }
+      total += localMax - prices.get(i);
+    }
+    return total;
+  }
+
+  public static void main(String[] args) {
+    System.out.println(new StockMaximize().maximumProfit(Arrays.asList(1, 4, 9, 2, 11)));
   }
 }
