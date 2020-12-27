@@ -37,7 +37,7 @@ public class ShortestPathVisitingAllNodes {
     final int ALL_VISITED = (int) (Math.pow(2, graph.length)) - 1;
     final Queue<int[]> queue = new ArrayDeque<>();
     for (int i = 0; i < graph.length; i++) {
-      //the node id, bitwise visited, length
+      //the node id,  bitwise visited, length
       queue.add(new int[]{i, 1 << i, 1});
     }
     final Set<String> visited = new HashSet<>();
