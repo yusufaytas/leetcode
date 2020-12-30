@@ -1,13 +1,11 @@
 package com.yusufaytas.leetcode;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,10 +51,6 @@ public class MinimumHeightTrees {
     if (edges == null || edges.length == 0) {
       return Arrays.asList(0);
     }
-    final int[][] distance = new int[n][n];
-    for (int i = 0; i < n; i++) {
-      Arrays.fill(distance[i], -1);
-    }
     final Map<Integer, Set<Integer>> graph = new HashMap<>();
     for (int i = 0; i < edges.length; i++) {
       if (!graph.containsKey(edges[i][0])) {
@@ -67,46 +61,22 @@ public class MinimumHeightTrees {
       }
       graph.get(edges[i][0]).add(edges[i][1]);
       graph.get(edges[i][1]).add(edges[i][0]);
-      distance[i][edges[i][0]] = 0;
-      distance[0][edges[i][0]] = 0;
     }
-    final Queue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o[2]));
-    for (int i = 0; i < n; i++) {
-      queue.add(new int[]{i, i, 0});
-    }
-    while (!queue.isEmpty()) {
-      final int[] tuple = queue.poll();
-      final int root = tuple[0];
-      final int node = tuple[1];
-      final int height = tuple[2];
-      distance[root][node] = height;
-      distance[node][root] = height;
-      for (final int neighbour : graph.get(node)) {
-        if (distance[neighbour][root] == -1) {
-          queue.add(new int[]{root, neighbour, height + 1});
-        }
+    while (graph.size() > 2) {
+      final List<Entry<Integer, Set<Integer>>> entries = graph.entrySet().stream()
+          .filter(e -> e.getValue().size() <= 1)
+          .collect(Collectors.toList());
+      for (final Entry<Integer, Set<Integer>> entry : entries) {
+        graph.remove(entry.getKey());
+        graph.get(entry.getValue().stream().findAny().get()).remove(entry.getKey());
       }
     }
-    final Map<Integer, Integer> minHeightTreeRoots = new HashMap<>();
-    int min = Integer.MAX_VALUE;
-    for (int i = 0; i < distance.length; i++) {
-      int max = 0;
-      for (int j = 0; j < distance.length; j++) {
-        max = Math.max(max, distance[i][j]);
-      }
-      min = Math.min(max, min);
-      minHeightTreeRoots.put(i, max);
-    }
-    final int finalMin = min;
-    return minHeightTreeRoots.entrySet().stream()
-        .filter(e -> e.getValue() == finalMin)
-        .map(value -> value.getKey())
-        .collect(Collectors.toList());
+    return graph.keySet().stream().collect(Collectors.toList());
   }
 
   public static void main(String[] args) {
     final int n = 7;
-    final int[][] edges = {{0, 1}, {1, 2}, {1, 3}, {2, 4}, {3, 5}, {4, 6}};
+    final int[][] edges = {{3, 0}, {3, 1}, {3, 2}, {3, 4}, {5, 4}};
     System.out.println(new MinimumHeightTrees().findMinHeightTrees(n, edges));
   }
 }
