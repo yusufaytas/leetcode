@@ -1,7 +1,9 @@
 package com.yusufaytas.leetcode;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
@@ -42,17 +44,45 @@ public class KSimilarStrings {
     queue.add(new SimilarString(A, 0));
     while (!queue.isEmpty()) {
       final SimilarString next = queue.poll();
-      if (next.str.equals(B)) {
+      final List<Integer> differentIndexes = new ArrayList<>();
+      for (int i = 0; i < B.length(); i++) {
+        if (next.str.charAt(i) != B.charAt(i)) {
+          differentIndexes.add(i);
+        }
+      }
+      if (differentIndexes.isEmpty()) {
         return next.level;
       }
       if (!visited.add(next.str)) {
         continue;
       }
-      for (int i = 0; i < B.length(); i++) {
-        for (int j = i + 1; j < B.length(); j++) {
-          if(next.str.charAt(i) == next.str.charAt(j)){
-            continue;
-          }
+      visitNext(B, queue, next, differentIndexes);
+    }
+    return -1;
+  }
+
+  private void visitNext(final String B, final Queue<SimilarString> queue,
+      final SimilarString next, final List<Integer> differentIndexes) {
+    for (final int i : differentIndexes) {
+      for (final int j : differentIndexes) {
+        if (i == j) {
+          continue;
+        }
+        if (B.charAt(j) == next.str.charAt(i) && next.str.charAt(j) == B.charAt(i)) {
+          final StringBuilder builder = new StringBuilder(next.str);
+          builder.setCharAt(i, next.str.charAt(j));
+          builder.setCharAt(j, next.str.charAt(i));
+          queue.add(new SimilarString(builder.toString(), next.level + 1));
+          return;
+        }
+      }
+    }
+    for (final int i : differentIndexes) {
+      for (final int j : differentIndexes) {
+        if (i == j) {
+          continue;
+        }
+        if (B.charAt(j) == next.str.charAt(i) || next.str.charAt(j) == B.charAt(i)) {
           final StringBuilder builder = new StringBuilder(next.str);
           builder.setCharAt(i, next.str.charAt(j));
           builder.setCharAt(j, next.str.charAt(i));
@@ -60,7 +90,6 @@ public class KSimilarStrings {
         }
       }
     }
-    return -1;
   }
 
   private static class SimilarString {
