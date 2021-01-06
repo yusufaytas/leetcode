@@ -1,5 +1,8 @@
 package com.yusufaytas.leetcode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /*
 Given an array of positive integers nums, remove the smallest subarray (possibly empty) such that the sum of the remaining elements is divisible by p. It is not allowed to remove the whole array.
 
@@ -40,6 +43,7 @@ Example 5:
 Input: nums = [1000000000,1000000000,1000000000], p = 3
 Output: 0
 s
+TODO: revisit
  */
 public class MakeSumDivisibleByP {
 
@@ -51,22 +55,24 @@ public class MakeSumDivisibleByP {
     if (total == 0) {
       return 0;
     }
-    int min = nums.length;
+    int min = nums.length, sum = 0;
+    final Map<Integer, Integer> diffMap = new HashMap<>();
+    diffMap.put(0, -1); // this is needed when sum equals to total
     for (int i = 0; i < nums.length; i++) {
-      int currentTotal = 0;
-      for (int j = i; j < nums.length; j++) {
-        currentTotal += nums[j];
-        if (currentTotal % p == total) {
-          min = Math.min(j - i + 1, min);
-        }
+      sum = (nums[i] + sum) % p;
+      //diff + total = sum, we wan to get rid of total, so indexes between sum and diff
+      final int diff = (sum - total + p) % p;
+      if (diffMap.containsKey(diff)) {
+        min = Math.min(i - diffMap.get(diff), min);
       }
+      diffMap.put(sum, i);
     }
     return min < nums.length ? min : -1;
   }
 
   public static void main(String[] args) {
-    final int[] nums = {26, 19, 11, 14, 18, 4, 7, 1, 30, 23, 19, 8, 10, 6, 26, 3};
-    final int p = 26;
+    final int[] nums = {8, 32, 31, 18, 34, 20, 21, 13, 1, 27, 23, 22, 11, 15, 30, 4, 2};
+    final int p = 148;
     System.out.println(new MakeSumDivisibleByP().minSubarray(nums, p));
   }
 }
