@@ -1,8 +1,5 @@
 package com.yusufaytas.leetcode;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /*
 Given an array A of integers, return the number of (contiguous, non-empty)
 subarrays that have a sum divisible by K.
@@ -18,16 +15,14 @@ Explanation: There are 7 subarrays with a sum divisible by K = 5:
 public class SubarraySumsDivisibleByK {
 
   public int subarraysDivByK(final int[] A, final int K) {
-    final Map<Integer, Integer> sums = new HashMap<>();
+    final int[] sums = new int[K + 1];
     int count = 0;
     int sum = 0;
-    sums.put(0, 1);
+    sums[0] = 1;
     for (int i = 0; i < A.length; i++) {
       sum = ((A[i] + sum) % K + K) % K;
-      if (sums.containsKey(sum)) {
-        count += sums.get(sum);
-      }
-      sums.put(sum, sums.getOrDefault(sum, 0) + 1);
+      count += sums[sum];
+      sums[sum]++;
     }
     return count;
   }
