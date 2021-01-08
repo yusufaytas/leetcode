@@ -2,13 +2,6 @@ package com.yusufaytas.leetcode;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 /*
 There are some spherical balloons spread in two-dimensional space. For each balloon,
@@ -23,8 +16,6 @@ keeps traveling up infinitely.
 
 Given an array points where points[i] = [xstart, xend], return the minimum number
 of arrows that must be shot to burst all balloons.
-
-
 
 Example 1:
 
@@ -60,43 +51,36 @@ public class MinimumNumberOfArrowsToBurstBalloons {
     if (points == null || points.length == 0) {
       return 0;
     }
-    final Comparator<int[]> comparator = Comparator.comparingInt(value -> value[0]);
+    final Comparator<int[]> comparator = (o1, o2) -> o1[0] == o2[0]
+        ? Integer.compare(o1[1], o2[1])
+        : Integer.compare(o1[0], o2[0]);
     Arrays.sort(points, comparator);
-    final Map<Integer, Set<Integer>> intersections = new HashMap<>();
-    final TreeMap<Integer, Set<Integer>> balloons = new TreeMap<>();
-    for (int i = 0; i < points.length; i++) {
-      intersections.put(points[i][0], new HashSet<>());
-      intersections.put(points[i][1], new HashSet<>());
-      balloons.put(i, new HashSet<>());
-    }
-    for (final int key : intersections.keySet()) {
-      for (int i = 0; i < points.length; i++) {
-        if (key <= points[i][1] && key >= points[i][0]) {
-          intersections.get(key).add(i);
-          balloons.get(i).add(key);
-        }
-      }
-    }
     int count = 0;
-    while (!balloons.isEmpty()) {
-      final Entry<Integer, Set<Integer>> e = balloons.firstEntry();
-      final int maxIntersecting = e.getValue().stream()
-          .max(Comparator.comparingInt(v -> intersections.get(v).size()))
-          .get();
-      for (final int balloon : intersections.get(maxIntersecting).stream()
-          .collect(Collectors.toList())) {
-        for (final int intersection : balloons.get(balloon)) {
-          intersections.get(intersection).remove(balloon);
+    int index = 0;
+    while (index < points.length) {
+      int maxFinishIndex = index, nextIndex = index;
+      final int searchIndex = Arrays
+          .binarySearch(points, new int[]{points[maxFinishIndex][1], Integer.MAX_VALUE},
+              comparator);
+      final int endIndex = Math
+          .min(searchIndex >= 0 ? searchIndex : Math.abs(searchIndex + 1), points.length - 1);
+      for (int i = index; i <= endIndex; i++) {
+        if (points[i][0] > points[maxFinishIndex][1]) {
+          break;
         }
-        balloons.remove(balloon);
+        nextIndex = i;
+        if (points[i][1] < points[maxFinishIndex][1]) {
+          maxFinishIndex = i;
+        }
       }
+      index = nextIndex + 1;
       count++;
     }
     return count;
   }
 
   public static void main(String[] args) {
-    final int[][] points = {{9, 17}, {4, 12}, {4, 8}, {4, 8}, {7, 13}, {3, 4}, {7, 12}, {9, 15}};
+    final int[][] points = {{-2147483646, -2147483645}, {2147483646, 2147483647}};
     System.out.println(new MinimumNumberOfArrowsToBurstBalloons().findMinArrowShots(points));
   }
 }
