@@ -51,30 +51,16 @@ public class MinimumNumberOfArrowsToBurstBalloons {
     if (points == null || points.length == 0) {
       return 0;
     }
-    final Comparator<int[]> comparator = (o1, o2) -> o1[0] == o2[0]
-        ? Integer.compare(o1[1], o2[1])
-        : Integer.compare(o1[0], o2[0]);
+    final Comparator<int[]> comparator = Comparator.comparingInt(value -> value[0]);
     Arrays.sort(points, comparator);
-    int count = 0;
-    int index = 0;
-    while (index < points.length) {
-      int maxFinishIndex = index, nextIndex = index;
-      final int searchIndex = Arrays
-          .binarySearch(points, new int[]{points[maxFinishIndex][1], Integer.MAX_VALUE},
-              comparator);
-      final int endIndex = Math
-          .min(searchIndex >= 0 ? searchIndex : Math.abs(searchIndex + 1), points.length - 1);
-      for (int i = index; i <= endIndex; i++) {
-        if (points[i][0] > points[maxFinishIndex][1]) {
-          break;
-        }
-        nextIndex = i;
-        if (points[i][1] < points[maxFinishIndex][1]) {
-          maxFinishIndex = i;
-        }
+    int count = 1, minEnd = points[0][1];
+    for (int i = 1; i < points.length; i++) {
+      if (points[i][0] > minEnd) {
+        count++;
+        minEnd = points[i][1];
+      } else {
+        minEnd = Math.min(minEnd, points[i][1]);
       }
-      index = nextIndex + 1;
-      count++;
     }
     return count;
   }
