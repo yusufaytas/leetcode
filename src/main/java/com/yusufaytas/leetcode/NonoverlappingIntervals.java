@@ -1,5 +1,7 @@
 package com.yusufaytas.leetcode;
 
+import static com.yusufaytas.leetcode.Utils.printMatrix;
+
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -35,23 +37,20 @@ public class NonoverlappingIntervals {
     if (intervals == null || intervals.length == 0) {
       return 0;
     }
-    Arrays.sort(intervals, Comparator.comparingInt(value -> value[0]));
-    int max = 0;
-    final int[] maxNonoverlapping = new int[intervals.length];
-    Arrays.fill(maxNonoverlapping, 1);
+    Arrays.sort(intervals, Comparator.comparingInt(value -> value[1]));
+    int count = 1, min = intervals[0][1];
+    printMatrix(intervals);
     for (int i = 1; i < intervals.length; i++) {
-      for (int j = i - 1; j >= 0; j--) {
-        if (intervals[j][1] <= intervals[i][0]) {
-          maxNonoverlapping[i] = Math.max(maxNonoverlapping[i], maxNonoverlapping[j] + 1);
-          max = Math.max(max, maxNonoverlapping[i]);
-        }
+      if (intervals[i][0] >= min) {
+        count++;
+        min = intervals[i][1];
       }
     }
-    return intervals.length - max;
+    return intervals.length - count;
   }
 
   public static void main(String[] args) {
-    final int[][] points = {{1, 2}, {2, 3}, {3, 4}, {1, 3}};
+    final int[][] points = {{1, 11}, {2, 12}, {11, 22}, {1, 100}};
     System.out.println(new NonoverlappingIntervals().eraseOverlapIntervals(points));
   }
 }
