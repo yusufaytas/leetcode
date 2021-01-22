@@ -1,5 +1,7 @@
 package com.yusufaytas.leetcode;
 
+import java.util.stream.IntStream;
+
 /*
 A conveyor belt has packages that must be shipped from one port to another within D days.
 
@@ -9,7 +11,6 @@ We may not load more weight than the maximum weight capacity of the ship.
 
 Return the least weight capacity of the ship that will result in
 all the packages on the conveyor belt being shipped within D days.
-
 
 
 Example 1:
@@ -47,31 +48,39 @@ Explanation:
 3rd day: 3
 4th day: 1, 1
 
+TODO: revisit
  */
 public class CapacityToShipPackagesWithinDDays {
 
   public int shipWithinDays(final int[] weights, final int D) {
-    final int[][] minCapacities = new int[D][weights.length];
-    minCapacities[0][0] = weights[0];
-    for (int i = 1; i < weights.length - D + 1; i++) {
-      minCapacities[0][i] = weights[i] + minCapacities[0][i - 1];
-    }
-    for (int i = 1; i < D; i++) {
-      for (int j = i; j < weights.length - D + i + 1; j++) {
-        int sum = 0;
-        minCapacities[i][j] = Integer.MAX_VALUE;
-        for (int k = j; k >= i; k--) {
-          sum += weights[k];
-          minCapacities[i][j] = Math
-              .min(Math.max(sum, minCapacities[i - 1][k - 1]), minCapacities[i][j]);
-        }
+    int start = IntStream.of(weights).max().getAsInt();
+    int end = IntStream.of(weights).sum();
+    while (start < end) {
+      final int mid = (end + start) / 2;
+      final int days = minDays(weights, mid);
+      if (days > D) {
+        start = mid + 1;
+      } else {
+        end = mid;
       }
     }
-    return minCapacities[D - 1][weights.length - 1];
+    return end;
+  }
+
+  private int minDays(final int[] weights, final int mid) {
+    int count = 1, sum = 0;
+    for (int i = 0; i < weights.length; i++) {
+      if (sum + weights[i] > mid) {
+        count++;
+        sum = 0;
+      }
+      sum += weights[i];
+    }
+    return count;
   }
 
   public static void main(String[] args) {
-    final int[] weights = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    final int[] weights = {1,2,3,4,5,6,7,8,9,10};
     final int D = 5;
     System.out.println(new CapacityToShipPackagesWithinDDays().shipWithinDays(weights, D));
   }
