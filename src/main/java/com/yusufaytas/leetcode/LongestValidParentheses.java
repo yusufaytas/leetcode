@@ -1,21 +1,20 @@
 /**
  * Copyright © 2021 Yusuf Aytas. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * <p>http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * <p>Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
 package com.yusufaytas.leetcode;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /*
 {{REVISIT}}
@@ -27,28 +26,35 @@ Another example is ")()())", where the longest valid parentheses substring is "(
  */
 public class LongestValidParentheses {
 
-  public int longestValidParentheses(String s) {
-    int max = 0, index = 0;
-    Stack<Integer> stack = new Stack<Integer>();
+  // Examples: )()())((())), ()(()
+  public int longestValidParentheses(final String s) {
+    int max = 0, currentMax = 0, stackSize = 0;
+    final Deque<int[]> stackSizes = new ArrayDeque<>();
     for (int i = 0; i < s.length(); i++) {
-      char c = s.charAt(i);
-      if (c == '(') {
-        stack.push(i);
-        continue;
-      }
-      if (stack.isEmpty()) {
-        index = i + 1;
-      } else {
-        stack.pop();
-        if (stack.isEmpty()) {
-          int currentMax = i - index + 1;
-          max = Math.max(max, currentMax);
-        } else {
-          max = Math.max(max, i - stack.peek());
+      final char c = s.charAt(i);
+      if (c == ')') {
+        if (stackSize == 0) {
+          stackSizes.clear();
+          currentMax = 0;
+          continue;
         }
+        stackSize--;
+        if(stackSizes.peek()[0] == stackSize){
+          currentMax += stackSizes.pop()[1];
+        }
+        currentMax += 2;
+      } else {
+        stackSizes.push(new int[]{stackSize, currentMax});
+        currentMax = 0;
+        stackSize++;
       }
+      max = Math.max(currentMax, max);
     }
     return max;
   }
 
+  public static void main(String[] args) {
+    final String s = ")()())()()(";
+    System.out.print(new LongestValidParentheses().longestValidParentheses(s));
+  }
 }
