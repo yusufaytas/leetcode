@@ -28,33 +28,26 @@ public class LongestValidParentheses {
 
   // Examples: )()())((())), ()(()
   public int longestValidParentheses(final String s) {
-    int max = 0, currentMax = 0, stackSize = 0;
-    final Deque<int[]> stackSizes = new ArrayDeque<>();
-    for (int i = 0; i < s.length(); i++) {
-      final char c = s.charAt(i);
-      if (c == ')') {
-        if (stackSize == 0) {
-          stackSizes.clear();
-          currentMax = 0;
-          continue;
+    int max = 0;
+    final int[] maxes = new int[s.length()];
+    for (int i = 1; i < s.length(); i++) {
+      if (s.charAt(i) == ')') {
+        if (s.charAt(i - 1) == '(') {
+          maxes[i] += (i > 1 ? maxes[i - 2] : 0) + 2;
+        } else if (maxes[i - 1] > 0
+            && i - 1 - maxes[i - 1] >= 0
+            && s.charAt(i - 1 - maxes[i - 1]) == '(') {
+          maxes[i] +=
+              maxes[i - 1] + 2 + (i - 2 - maxes[i - 1] >= 0 ? maxes[i - 2 - maxes[i - 1]] : 0);
         }
-        stackSize--;
-        if(stackSizes.peek()[0] == stackSize){
-          currentMax += stackSizes.pop()[1];
-        }
-        currentMax += 2;
-      } else {
-        stackSizes.push(new int[]{stackSize, currentMax});
-        currentMax = 0;
-        stackSize++;
       }
-      max = Math.max(currentMax, max);
+      max = Math.max(max, maxes[i]);
     }
     return max;
   }
 
   public static void main(String[] args) {
-    final String s = ")()())()()(";
+    final String s = "()(())";
     System.out.print(new LongestValidParentheses().longestValidParentheses(s));
   }
 }
